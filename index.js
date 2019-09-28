@@ -37,18 +37,6 @@ app.use(session({
 
 }))
 
-
-// app.use((req, res, next) => {
-//     const userId = req.session.userid
-//     console.log("in middleware. userId: ", userId)
-//     console.log(req.session);
-//     if (userId) {
-//         res.locals.userId = userId;
-//         console.log("in middleware. res.locals.userId: ", res.locals.userId)
-//     }
-//     next();
-// })
-
 app.use(express.json());
 
 app.get('/api/shows', (req, res) => {
@@ -70,19 +58,14 @@ app.post('/api/shows', (req, res) => {
     }
 });
 
-app.post('/api/getMyFavouriteShows', (req, res) => async {
-
-    console.log(req.body);
-    //(async () => {
-
-        await getUserFavouriteShows(req, res);
-
-    //})();
-
+app.post('/api/getMyFavouriteShows', async (req, res) => {
+    console.log('getMyFavouriteShows body',req.body);
+    console.log('getMyFavouriteShows user id ',req.body.userId);
+    await getUserFavouriteShows(req, res);
 });
 
 async function getUserFavouriteShows(req, res) {
-    return new Promise((resolve, reject) => async {
+    return new Promise(async (resolve, reject) => {
         try {
             const favouriteShows =  await getFavouriteShows(req, res);
             if (!favouriteShows) {
@@ -103,17 +86,18 @@ async function getUserFavouriteShows(req, res) {
 async function getFavouriteShows(req, res) {
     return new Promise((resolve, reject) => {
             const db = connectDb();
-            const user_id = req.userId;
+            const user_id = req.body.userId;
+            //const user_id = req.userId;
             console.log("in getFavouriteShows user id: "+user_id);
             let sql = `SELECT * FROM shows WHERE id IN (SELECT showId FROM usershow WHERE userId = '${user_id}')`;
 
             db.query(sql, (err, result) => {
                 if (err){
-                    closeDb();
+                    closeDb(db);
                     reject(err);
                 }
                 console.log(result);
-                closeDb();
+                closeDb(db);
                 resolve(result);
             });
 
@@ -121,6 +105,9 @@ async function getFavouriteShows(req, res) {
     });
 
 }
+
+
+
 
 app.post('/api/addFavouriteShow', (req, res) => {
 
@@ -425,5 +412,19 @@ const closeDb = function (db) {
 }
 
 
+console.log('lets do some tests :)))');
+console.log('Lets test getFavouriteShows...');
+getFavouriteShows({body:{userId:'blabla@gmail.com'}})
+.then(result=>{
+    console.log('getFavouriteShows success !!! ',result);
+},
+err=>{
+    console.log('ERROR IN getFavouriteShows FIX IT !!!',err);
+    throw err;
+});
+
+
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
+
+
