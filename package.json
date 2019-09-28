@@ -1,0 +1,22 @@
+{
+  "name": "nodeExamples",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/joi": "^15.0.3",
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "~4.16.4",
+    "express-session": "^1.16.2",
+    "mysql": "^2.17.1",
+    "nodemon": "^1.19.1",
+    "request": "^2.88.0"
+  }
+}
