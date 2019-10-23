@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 
-export default class TVShowScreen extends React.Component {
+export default class FavouriteShowScreen extends React.Component {
   static navigationOptions = {
     title: 'Details',
   };
@@ -32,12 +32,12 @@ export default class TVShowScreen extends React.Component {
 
     this.setState({
       defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 100, height: 100, }} />,
-      name: item ? JSON.stringify(item.show.name) : '',
-      language: item ? JSON.stringify(item.show.language) : '',
-      premiered: item ? JSON.stringify(item.show.premiered) : '',
-      rating: item ? JSON.stringify(item.show.rating.average) : '',
-      genres: item ? JSON.stringify(item.show.genres) : '',
-      imageUrl: imgUrl ? JSON.stringify(imgUrl) : '',
+      name: item ? JSON.stringify(item.name)  : '',
+      language: item ? JSON.stringify(item.language) :  '',
+      premiered: item ? JSON.stringify(item.premiered) :  '',
+      rating: item ? JSON.stringify(item.rating) : '',
+      genres: item ? JSON.stringify(item.genres) : '',
+      imageUrl: imgUrl==null ?'': JSON.stringify(imgUrl),
     }, () => this.getData())
 
   }

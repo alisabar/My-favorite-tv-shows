@@ -85,7 +85,7 @@ export default class MyLogin extends React.Component {
 
       console.log('calling login');
 
-      fetch('http://192.168.1.10:5000/api/login', {
+      fetch('http://192.168.1.7:5000/api/login', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

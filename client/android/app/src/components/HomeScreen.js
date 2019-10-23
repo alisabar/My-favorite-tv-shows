@@ -30,7 +30,7 @@ export default class HomeScreen extends Component {
   }
 
   fetchData = () => {
-    fetch('http://192.168.1.10:5000/api/shows', {
+    fetch('http://192.168.1.7:5000/api/shows', {
       method: 'GET'
     })
       .then((response) => response.json())
@@ -48,7 +48,7 @@ export default class HomeScreen extends Component {
   fetchSearchData = () => {
     const searchFor = this.state.searchKeyWords ? this.state.searchKeyWords : '';
     if (searchFor.length > 0) {
-      fetch('http://192.168.1.10:5000/api/shows', {
+      fetch('http://192.168.1.7:5000/api/shows', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -81,7 +81,7 @@ export default class HomeScreen extends Component {
       button = <ScrollView style={styles.scroll}>
         {
           showsData.map((item, index) => (
-            <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image.medium })} underlayColor='#ddd'>
+            <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image == null ? '' : item.show.image.medium   })} underlayColor='#ddd'>
 
               <TVShowComponent language={item.show.language} genres={item.show.genres} name={item.show.name} />
             </TouchableHighlight>
@@ -126,7 +126,7 @@ export default class HomeScreen extends Component {
         <Text style={styles.heading} >
           TV Shows:
              </Text>
-        <View style={{ flex: 5, flexDirection: 'column', }}>
+        <View style={{ flex: 5, flexDirection: 'column' }}>
           {this.state.shows ?
             this.state.shows : <ActivityIndicator size="large" color="#0000ff" />}
         </View>

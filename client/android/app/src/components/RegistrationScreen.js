@@ -67,7 +67,7 @@ export default class MyRegistration extends React.Component {
     console.log('password: ' + this.state.password);
 
     if (this.state.is_email_valid && this.state.is_pass_valid) {
-      fetch('http://192.168.1.10:5000/api/register', {
+      fetch('http://10.57.24.91:5000/api/register', {
         method: 'POST',
         headers: {
           Accept: 'application/json',

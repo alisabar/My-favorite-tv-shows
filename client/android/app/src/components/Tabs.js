@@ -9,7 +9,7 @@ import myFavouritesNavigator from './myShowsNavigator.js';
 import FavouriteScreen from './Favourites.js';
 import TVShowScreen from './TVShowScreen.js';
 import HomeScreen from './HomeScreen.js';
-
+import FavouriteShowScreen from './FavouriteShowScreen.js';
 
 const AppNavigator = createStackNavigator(
     {
@@ -25,7 +25,7 @@ const AppNavigator = createStackNavigator(
 const myShowsContainer = createStackNavigator(
     {
         FavouritesScreen: FavouriteScreen,
-        TVShow: TVShowScreen,
+        FavouriteShow: FavouriteShowScreen,
     },
     {
         initialRouteName: "FavouritesScreen"

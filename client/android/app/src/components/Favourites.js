@@ -1,7 +1,8 @@
 import React from 'react';
 import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-// {this.state.shows? this.state.shows : <ActivityIndicator size="large" color="#0000ff" />}
+import FavouriteShowScreen from './FavouriteShowScreen.js';
+import TVShowComponent from './TVshow.js';
 export default class MyFavouriteShows extends React.Component {
 
     static navigationOptions = {
@@ -21,7 +22,7 @@ export default class MyFavouriteShows extends React.Component {
 
             console.log("user id extracted: "+userId);
             if (userId !== null) {
-                fetch('http://192.168.1.10:5000/api/getMyFavouriteShows', {
+                fetch('http://192.168.1.7:5000/api/getMyFavouriteShows', {
                     method: 'POST',
                     headers: {
                         Accept: 'application/json',
@@ -36,8 +37,8 @@ export default class MyFavouriteShows extends React.Component {
                         console.log('responseJson favourites: ', responseJson);
                         this.setState({
                             favouriteShows: JSON.parse(responseJson),
-                        });
-                    }, () => this.createListComponents())
+                        },() => this.createListComponents());
+                    })
                     .catch((error) => {
                         console.error(error);
                     });
@@ -60,34 +61,36 @@ export default class MyFavouriteShows extends React.Component {
         return
       }
 
-        getData = async () => {
-          try {
-            const value = await AsyncStorage.getItem('userId')
-            if (value !== null) {
-              this.setState({
-                userId: value
-              })
-            }
-          } catch (e) {
-            console.log(e);
-          }
-        }
+//        getData = async () => {
+//          try {
+//            const value = await AsyncStorage.getItem('userId')
+//            if (value !== null) {
+//              this.setState({
+//                userId: value
+//              })
+//            }
+//          } catch (e) {
+//            console.log(e);
+//          }
+//        }
 
     createListComponents = () => {
         let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
+        console.log("createListComponents favourites:");
+        console.log(showsData);
         let button = [];
 
         if (showsData) {
             button = <ScrollView style={styles.scroll}>
                 {
                     showsData.map((item, index) => (
-                        <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('TVShow', {
+                        <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('FavouriteShow', {
                             currentItem: item,
-                            ImageUrl: item.show.image.medium
+                            ImageUrl: item.imageUrl == null ? '': item.imageUrl,
                         })}
                             underlayColor='#ddd'>
 
-                            <TVShowComponent language={item.show.language} genres={item.show.genres} name={item.show.name} />
+                            <TVShowComponent language={item.language} genres={item.genres} name={item.name ? item.name : '' } />
                         </TouchableHighlight>
                     ))
                 }
@@ -101,12 +104,14 @@ export default class MyFavouriteShows extends React.Component {
     render() {
 
         return (
-            <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-                <Text>hgjhg</Text>
+        <View style={styles.container}>
+            <View style={{ flex: 5, flexDirection: 'column' }}>
 
+                {this.state.shows ?
+                            this.state.shows : <ActivityIndicator size="large" color="#0000ff" />}
 
             </View>
-
+        </View>
         );
     }
 }

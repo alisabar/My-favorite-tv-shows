@@ -18,6 +18,40 @@ const {
 
 const app = express()
 
+const connectDb = function () {
+    console.log('In function connectDB');
+    db = mysql.createConnection({
+        host: "localhost",
+        user: "root",
+        password: "root123",
+        database: "myshows"
+    });
+    console.log('createConnection');
+    db.connect(err => {
+        if (err) {
+            console.log(`Could not connect to db!.`);
+            console.log(err);
+            throw err;
+        }
+    });
+    return db;
+}
+const closeDb = function (db) {
+    console.log('in closeDb');
+    db.end(function (err) {
+        if (err) {
+            console.log(err);
+            throw err;
+            res.send(err);
+            res.sendStatus(500);
+        }
+        const msg = 'Database connection successfully closed.';
+        console.log(msg);
+
+    });
+}
+
+
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
@@ -61,7 +95,44 @@ app.post('/api/shows', (req, res) => {
 app.post('/api/getMyFavouriteShows', async (req, res) => {
     console.log('getMyFavouriteShows body',req.body);
     console.log('getMyFavouriteShows user id ',req.body.userId);
-    await getUserFavouriteShows(req, res);
+    const favouritesShows = await getUserFavouriteShows(req, res);
+    res.json(JSON.stringify(favouritesShows));
+    console.log("favouritesShows:");
+    console.log(favouritesShows);
+});
+
+app.post('/api/addFavouriteShow',async(req, res) => {
+    console.log('addFavouriteShow body: ',req.body);
+
+        await insertShow(req, res);
+
+
+
+});
+
+app.post('/api/logout', (req, res) => {
+    console.log('logout ',req.body);
+});
+
+app.post('/api/login', (req, res) => {
+
+    console.log(req.body);
+    (async () => {
+
+        await loginUser(req, res);
+
+    })();
+
+});
+
+app.post('/api/register', (req, res) => {
+
+    console.log(req.body);
+    (async () => {
+
+        await registerUser(req, res);
+
+    })();
 });
 
 async function getUserFavouriteShows(req, res) {
@@ -72,8 +143,26 @@ async function getUserFavouriteShows(req, res) {
 
                 console.log('favouriteShows doesn`t exists');
                 res.send('favouriteShows doesn`t exists');
-
+                reject("favouriteShows doesn`t exists");
+                return;
             }
+
+            let myFavourites = favouriteShows.map(item=> {
+
+               var rObj = {};
+               rObj["name"] = item.name? item.name : '';
+               rObj["language"] = item.language? item.language : '';
+               rObj["premiered"] = item.premiered ?item.premiered: '' ;
+               rObj["rating"] = item.rating? item.rating : '';
+               rObj["imageUrl"] = item.imageUrl? item.imageUrl : '';
+               rObj["genres"] = item.genre? item.genre.split(",") :[];
+               return rObj;
+            });
+            //console.log("favouriteShows: \n",favouriteShows);
+             console.log("myFavourites: \n",myFavourites);
+             resolve(myFavourites);
+
+
         }
         catch(error){
             console.log('Catched this in getUserFavouriteShows',error);
@@ -87,16 +176,27 @@ async function getFavouriteShows(req, res) {
     return new Promise((resolve, reject) => {
             const db = connectDb();
             const user_id = req.body.userId;
-            //const user_id = req.userId;
             console.log("in getFavouriteShows user id: "+user_id);
-            let sql = `SELECT * FROM shows WHERE id IN (SELECT showId FROM usershow WHERE userId = '${user_id}')`;
+
+            let sql =`select  shows.name, shows.language, shows.premiered , shows.rating, shows.imageUrl ,
+                  GROUP_CONCAT(genresshows.genre) as genre
+                  from genresshows join shows
+                  where genresshows.showId = shows.id and genresshows.showId in
+                    (select shows.id as id
+                    from shows
+                    where shows.id in
+                        (select showId
+                        from usershow
+                         where userId = '${user_id}' )) GROUP BY shows.name`;
 
             db.query(sql, (err, result) => {
                 if (err){
                     closeDb(db);
                     reject(err);
+
                 }
-                console.log(result);
+
+                console.log("Json Favourites :\n"+JSON.stringify(result));
                 closeDb(db);
                 resolve(result);
             });
@@ -105,24 +205,6 @@ async function getFavouriteShows(req, res) {
     });
 
 }
-
-
-
-
-app.post('/api/addFavouriteShow', (req, res) => {
-
-    console.log(req.body);
-    (async () => {
-
-        await insertShow(req, res);
-
-
-
-
-    })();
-
-});
-
 
 async function getShowById(db, id) {
     return new Promise((resolve, reject) => {
@@ -142,9 +224,24 @@ async function getShowById(db, id) {
     });
 
 }
+async function asyncQuery(db,sql){
+    return new Promise( (resolve,reject)=>{
+        db.query(sql,(err, result)=>{
+            closeDb(db);
+
+            if(err){
+                reject(err);
+            }else {
+                resolve(result);
+            }
+
+        });
+    });
+
+}
 
 async function insertShow(req, res) {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
 
             console.log("In insertShow");
@@ -152,7 +249,12 @@ async function insertShow(req, res) {
             const myShow = req.body
             const userId = myShow.userId;
             console.log("userId: ", userId);
-            const receivedShow = { name: myShow.name, language: myShow.language, premiered: myShow.premiered, rating: myShow.rating };
+            const receivedShow = { name: myShow.name,
+                                language: myShow.language,
+                                premiered: myShow.premiered,
+                                rating: myShow.rating,
+                                imageUrl: myShow.imageUrl};
+
             const key1 = myShow.name.slice(1, myShow.name.length - 1);
             console.log("key1: ", key1);
             const key2 = myShow.language.slice(1, myShow.language.length - 1);
@@ -160,45 +262,39 @@ async function insertShow(req, res) {
             const receivedShowId = key1.concat(key2);
             console.log("receivedShowId" + receivedShowId);
 
-            //const ShowId = shows.getShowId(receivedShowId);
-            // console.log("ShowId: ", ShowId);
-
             const newShow = {
                 id: receivedShowId,
                 name: key1,
                 language: key2,
                 premiered: myShow.premiered.slice(1, myShow.premiered.length - 1),
-                rating: myShow.rating,
-                imageUrl : myShow.imageUrl,
+                rating: !myShow.rating ? 0 : myShow.rating,
+                imageUrl : myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
             };
-            shows.insertNewShow(db, newShow)
-                .then(function (value) {
-                    return new Promise((resolve, reject) => {
-                        const genres = myShow.genres;
-                        let sql3 = 'INSERT INTO userShow (userId, showId) VALUES ("' + userId + '","' + receivedShowId + '");';
-                        genres.forEach(genre => {
-                            console.log('genre: ' + genre);
-                            sql3 += 'INSERT INTO genres (genre) VALUES ("' + genre + '"); INSERT INTO genresShows (genre , showId) VALUES ("' + genre + '","' + receivedShowId + '");';
-                            console.log('sql3:  ' + sql3);
-                        });
-                        let query3 = db.query(sql3, (err, result) => {
-                            if (err) {
-                                closeDb(db);
-                                console.log(err);
-                                reject(err);
-                                return;
-                            }
-                            res.json({ msg: "successfully inserted all" });
-                            console.log("successfully inserted all");
-                            closeDb(db);
-                            resolve(result);
-                        });
 
-                    })
+            await shows.insertNewShow(db, newShow);
+
+            let userShowSql = 'INSERT INTO userShow (userId, showId)'+
+             'SELECT "' + userId + '","' + receivedShowId + '" '+
+             'WHERE NOT EXISTS (SELECT * FROM userShow WHERE userId = "' + userId + '" and showId = "' + receivedShowId + '");\r\n';
+            let genres=null;
+            await asyncQuery(connectDb(),userShowSql);
+
+            if(myShow.genres && (genres = JSON.parse(myShow.genres)) ) {
+                genres.forEach(async genre => {
+                    console.log('genre: ' + genre);
+                    genreField = genre;
+                    let genreSql= 'INSERT INTO genres (name) SELECT "' + genre + '" WHERE NOT EXISTS (SELECT * FROM genres WHERE name = "' + genre + '");';
+                    let genreShowSql = 'INSERT INTO genresShows (genre , showId) SELECT "' + genre + '","' + receivedShowId + '" '+
+                    'WHERE NOT EXISTS (SELECT * FROM genresShows WHERE genre = "' + genre + '" and showId = "' + receivedShowId + '");';
+                    await asyncQuery(connectDb(),genreSql);
+                    await asyncQuery(connectDb(),genreShowSql);
+
+
                 });
+            }
         }
         catch (error) {
-            console.log('Catched this:');
+            console.log('Cought this:',error);
             console.log(error.message);
             res.sendStatus(500);
         }
@@ -207,21 +303,6 @@ async function insertShow(req, res) {
     });
 
 }
-
-app.post('/api/logout', (req, res) => {
-
-});
-
-app.post('/api/login', (req, res) => {
-
-    console.log(req.body);
-    (async () => {
-
-        await loginUser(req, res);
-
-    })();
-
-});
 
 async function loginUser(req, res) {
     console.log('Start login.');
@@ -234,10 +315,6 @@ async function loginUser(req, res) {
             return;
         }
         console.log(user);
-        // req.session.userid = user[0].id;
-        // res.locals.user = user[0].id;
-        //console.log(req.session);
-        //console.log("req.session.userId ", req.session.userid);
         console.log("User logged in successfully: " + JSON.stringify(user));
         res.json({ userId: user[0].id });
     }
@@ -270,16 +347,6 @@ async function getUser(postedUser) {
     });
 
 }
-
-app.post('/api/register', (req, res) => {
-
-    console.log(req.body);
-    (async () => {
-
-        await registerUser(req, res);
-
-    })();
-});
 
 async function registerUser(req, res) {
 
@@ -341,12 +408,14 @@ async function validateForm(req, res) {
     });
 
 }
+
 function createUserId(data) {
     //const id = require('crypto').createHash('sha1').update({ email: data.email, password: data.password }).digest('base64');
     const id = data.email + data.password;
     return id;
 
 }
+
 async function createUser(userData) {
     return new Promise((resolve, reject) => {
         console.log('function createUser');
@@ -367,8 +436,12 @@ async function createUser(userData) {
                 reject(err);
 
             }
-            insertedUserId = result.insertId;
-            console.log("Inserted user id: " + result.insertId);
+            if(result.insertId){
+                insertedUserId = result.insertId;
+                console.log("Inserted user id: " + result.insertId);
+            }
+
+
             closeDb(db);
             resolve(user.id);
 
@@ -378,51 +451,50 @@ async function createUser(userData) {
     });
 }
 
-const connectDb = function () {
-    console.log('In function connectDB');
-    db = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root123",
-        database: "myshows"
-    });
-    console.log('createConnection');
-    db.connect(err => {
-        if (err) {
-            console.log(`Could not connect to db!.`);
-            console.log(err);
-            throw err;
-        }
-    });
-    return db;
-}
-const closeDb = function (db) {
-    console.log('in closeDb');
-    db.end(function (err) {
-        if (err) {
-            console.log(err);
-            throw err;
-            res.send(err);
-            res.sendStatus(500);
-        }
-        const msg = 'Database connection successfully closed.';
-        console.log(msg);
 
-    });
-}
+//console.log('lets do some tests :)))');
+//console.log('Lets test getFavouriteShows...');
+//getUserFavouriteShows({body:{userId:'lala@la.lalalala12'}})
+//.then(result=>{
+//    console.log('getFavouriteShows success !!! ',result);
+//},
+//err=>{
+//    console.log('ERROR IN getFavouriteShows FIX IT !!!',err);
+//    throw err;
+//});
 
-
-console.log('lets do some tests :)))');
-console.log('Lets test getFavouriteShows...');
-getFavouriteShows({body:{userId:'blabla@gmail.com'}})
-.then(result=>{
-    console.log('getFavouriteShows success !!! ',result);
-},
-err=>{
-    console.log('ERROR IN getFavouriteShows FIX IT !!!',err);
-    throw err;
-});
-
+//
+//console.log('Lets test addFavouriteShow...');
+//let fakeFavShow={
+//userId: 'lala@la.lalalala12',
+// id: 'Funy GirlsEnglish',
+//  name: '"Funy Girls"',
+//  language: '"English"',
+//  premiered: '"2017-09-05"',
+//  rating: '6.3',
+//  imageUrl:
+//   '"http://static.tvmaze.com/uploads/images/medium_portrait/137/344365.jpg"',
+//   genres : '["Comedy","Drama"]'
+//};
+//
+//function FakeResponse(){
+//    this.send=function() {
+//        console.log('mock send was called!',arguments);
+//    }
+//
+//    this.json=function(){
+//            console.log('mock json was called!',arguments);
+//        }
+//
+//}
+//
+//insertShow({body:fakeFavShow} , new FakeResponse())
+//.then(result=>{
+//    console.log('insertShow success!!!!',result);
+//},error=>{
+//    console.log('insertShow error',error);
+//    throw error;
+//});
 
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
