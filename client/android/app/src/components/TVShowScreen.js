@@ -22,7 +22,7 @@ export default class TVShowScreen extends React.Component {
       premiered: '',
       rating: '',
       genres: '',
-      imageUrl:''
+      imageUrl: ''
     }
   }
   componentDidMount() {
@@ -54,7 +54,7 @@ export default class TVShowScreen extends React.Component {
     }
   }
   submitFavourite = () => {
-  const { navigate } = this.props.navigation;
+    const { navigate } = this.props.navigation;
     console.log('submit favourite pressed');
     if (this.state.userId.length > 0) {
       fetch('http://192.168.1.7:5000/api/addFavouriteShow', {
@@ -78,7 +78,7 @@ export default class TVShowScreen extends React.Component {
           console.log('responseJson after addFavouriteShow: ', responseJson);
           this.setState({
             msg: responseJson.msg
-          },()=>{navigate('Home');});
+          }, () => { navigate('Home'); });
         })
         .catch((error) => {
           console.error(error);
@@ -91,43 +91,43 @@ export default class TVShowScreen extends React.Component {
 
 
     return (
-    <View style={{ flex: 1, justifyContent: "space-around", padding:10}}>
+      <View style={{ flex: 1, justifyContent: "space-around", padding: 10 }}>
 
-            <View style={styles.image}>
-                {this.state.defaultImage ? this.state.defaultImage : false}
-            </View>
+        <View style={styles.image}>
+          {this.state.defaultImage ? this.state.defaultImage : false}
+        </View>
 
         <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>name: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name}</Text>}
-            </View>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>name: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name}</Text>}
+          </View>
         </View>
         <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>language: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language}</Text>}
-            </View>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>language: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language}</Text>}
+          </View>
         </View>
         <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>premiered: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.premiered == 'null' ? false : <Text style={styles.text}>{this.state.premiered}</Text>}
-            </View>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>premiered: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.premiered == 'null' ? false : <Text style={styles.text}>{this.state.premiered}</Text>}
+          </View>
         </View>
         <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>rating: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.rating == 'null' ? false : <Text style={styles.text}>{this.state.rating}</Text>}
-            </View>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>rating: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.rating == 'null' ? false : <Text style={styles.text}>{this.state.rating}</Text>}
+          </View>
         </View>
         <TouchableHighlight onPress={this.submitFavourite} style={styles.touchable}>
           <Text style={styles.button}>
@@ -146,26 +146,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
-  headline:{
+  headline: {
     color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
   },
   text: {
-        color: 'black',
-        fontSize: 20,
+    color: 'black',
+    fontSize: 20,
   },
   scroll: {
     flex: 1,
   },
   heading: {
-  flex:1,
+    flex: 1,
 
-//    marginLeft: 15,
-//    color: '#000080',
-//    fontSize: 20,
-//    fontWeight: 'bold',
-//    marginBottom: 20,
+    //    marginLeft: 15,
+    //    color: '#000080',
+    //    fontSize: 20,
+    //    fontWeight: 'bold',
+    //    marginBottom: 20,
 
   },
   button: {
@@ -176,32 +176,32 @@ const styles = StyleSheet.create({
   touchable: {
 
 
-        padding: 10,
-        height: 30,
-        width: 50,
-        backgroundColor: '#000080',
-        //textAlign: 'center',
-        borderRadius: 30,
-        alignSelf:'center',
+    padding: 10,
+    height: 30,
+    width: 50,
+    backgroundColor: '#000080',
+    //textAlign: 'center',
+    borderRadius: 30,
+    alignSelf: 'center',
 
   },
-  row:{
-    flex:1,
+  row: {
+    flex: 1,
     flexDirection: 'row',
     //justifyContent: 'space-around',
     alignItems: 'flex-start',
 
 
   },
-  image:{
+  image: {
     //alignSelf:'center',
-     flex:3,
-     flexDirection: 'row',
-     justifyContent: 'center',
+    flex: 3,
+    flexDirection: 'row',
+    justifyContent: 'center',
 
 
   },
-  info:{
+  info: {
     flex: 1,
   },
 

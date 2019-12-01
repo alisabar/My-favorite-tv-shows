@@ -11,7 +11,6 @@ export default class MyFavouriteShows extends React.Component {
 
     constructor(props) {
         super(props);
-        // this.SubmitForm = this.SubmitForm.bind(this);
         this.retrieveItem = this.retrieveItem.bind(this);
         this.state = { favouriteShows: '', msg: 'lalala', shows: '' };
     }
@@ -53,26 +52,13 @@ export default class MyFavouriteShows extends React.Component {
     retrieveItem = async () => {
         try {
           const retrievedItem =  await AsyncStorage.getItem('userId');
-          //const item = JSON.parse(retrievedItem);
+
           return retrievedItem;
         } catch (error) {
           console.log(error.message);
         }
         return
       }
-
-//        getData = async () => {
-//          try {
-//            const value = await AsyncStorage.getItem('userId')
-//            if (value !== null) {
-//              this.setState({
-//                userId: value
-//              })
-//            }
-//          } catch (e) {
-//            console.log(e);
-//          }
-//        }
 
     createListComponents = () => {
         let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
