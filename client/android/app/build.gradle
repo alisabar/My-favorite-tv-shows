@@ -142,15 +142,15 @@ android {
     }
 }
 dependencies {
-    implementation project(':react-native-google-login')
-    implementation(project(":react-native-google-signin"))
+    //implementation project(':react-native-google-login')
+    //implementation(project(":react-native-google-signin"))
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-gesture-handler')
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    //implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     implementation "com.facebook.react:react-native:+"  // From node_modules
-    implementation 'com.google.firebase:firebase-auth:19.1.0'
-    implementation 'com.google.firebase:firebase-firestore:21.2.1'
+    //implementation 'com.google.firebase:firebase-auth:19.1.0'
+    //implementation 'com.google.firebase:firebase-firestore:21.2.1'
 
 }
 

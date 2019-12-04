@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:10935348941:android:f099b8cedc746367e00384",
         "android_client_info": {
-          "package_name": "com.TVShows"
+          "package_name": "com.tvshowsproject"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "10935348941-eqd0f7kpipt5r4b03o12rsuid5piukrc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.TVShows",
+            "package_name": "com.tvshowsproject",
             "certificate_hash": "c9a1cccbf2485a8941b99da6661fb568e63ebb7b"
           }
         },
