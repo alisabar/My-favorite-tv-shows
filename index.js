@@ -21,10 +21,7 @@ const app = express()
 const connectDb = function () {
     console.log('In function connectDB');
     db = mysql.createConnection({
-        host: "localhost",
-        user: "root",
-        password: "root123",
-        database: "myshows"
+
     });
     console.log('createConnection');
     db.connect(err => {
@@ -93,25 +90,25 @@ app.post('/api/shows', (req, res) => {
 });
 
 app.post('/api/getMyFavouriteShows', async (req, res) => {
-    console.log('getMyFavouriteShows body',req.body);
-    console.log('getMyFavouriteShows user id ',req.body.userId);
+    console.log('getMyFavouriteShows body', req.body);
+    console.log('getMyFavouriteShows user id ', req.body.userId);
     const favouritesShows = await getUserFavouriteShows(req, res);
     res.json(JSON.stringify(favouritesShows));
     console.log("favouritesShows:");
     console.log(favouritesShows);
 });
 
-app.post('/api/addFavouriteShow',async(req, res) => {
-    console.log('addFavouriteShow body: ',req.body);
+app.post('/api/addFavouriteShow', async (req, res) => {
+    console.log('addFavouriteShow body: ', req.body);
 
-        await insertShow(req, res);
+    await insertShow(req, res);
 
 
 
 });
 
 app.post('/api/logout', (req, res) => {
-    console.log('logout ',req.body);
+    console.log('logout ', req.body);
 });
 
 app.post('/api/login', (req, res) => {
@@ -138,7 +135,7 @@ app.post('/api/register', (req, res) => {
 async function getUserFavouriteShows(req, res) {
     return new Promise(async (resolve, reject) => {
         try {
-            const favouriteShows =  await getFavouriteShows(req, res);
+            const favouriteShows = await getFavouriteShows(req, res);
             if (!favouriteShows) {
 
                 console.log('favouriteShows doesn`t exists');
@@ -147,25 +144,25 @@ async function getUserFavouriteShows(req, res) {
                 return;
             }
 
-            let myFavourites = favouriteShows.map(item=> {
+            let myFavourites = favouriteShows.map(item => {
 
-               var rObj = {};
-               rObj["name"] = item.name? item.name : '';
-               rObj["language"] = item.language? item.language : '';
-               rObj["premiered"] = item.premiered ?item.premiered: '' ;
-               rObj["rating"] = item.rating? item.rating : '';
-               rObj["imageUrl"] = item.imageUrl? item.imageUrl : '';
-               rObj["genres"] = item.genre? item.genre.split(",") :[];
-               return rObj;
+                var rObj = {};
+                rObj["name"] = item.name ? item.name : '';
+                rObj["language"] = item.language ? item.language : '';
+                rObj["premiered"] = item.premiered ? item.premiered : '';
+                rObj["rating"] = item.rating ? item.rating : '';
+                rObj["imageUrl"] = item.imageUrl ? item.imageUrl : '';
+                rObj["genres"] = item.genre ? item.genre.split(",") : [];
+                return rObj;
             });
             //console.log("favouriteShows: \n",favouriteShows);
-             console.log("myFavourites: \n",myFavourites);
-             resolve(myFavourites);
+            console.log("myFavourites: \n", myFavourites);
+            resolve(myFavourites);
 
 
         }
-        catch(error){
-            console.log('Catched this in getUserFavouriteShows',error);
+        catch (error) {
+            console.log('Catched this in getUserFavouriteShows', error);
             //console.log(error.message);
             res.sendStatus(500);
         }
@@ -174,11 +171,11 @@ async function getUserFavouriteShows(req, res) {
 
 async function getFavouriteShows(req, res) {
     return new Promise((resolve, reject) => {
-            const db = connectDb();
-            const user_id = req.body.userId;
-            console.log("in getFavouriteShows user id: "+user_id);
+        const db = connectDb();
+        const user_id = req.body.userId;
+        console.log("in getFavouriteShows user id: " + user_id);
 
-            let sql =`select  shows.name, shows.language, shows.premiered , shows.rating, shows.imageUrl ,
+        let sql = `select  shows.name, shows.language, shows.premiered , shows.rating, shows.imageUrl ,
                   GROUP_CONCAT(genresshows.genre) as genre
                   from genresshows join shows
                   where genresshows.showId = shows.id and genresshows.showId in
@@ -189,17 +186,17 @@ async function getFavouriteShows(req, res) {
                         from usershow
                          where userId = '${user_id}' )) GROUP BY shows.name`;
 
-            db.query(sql, (err, result) => {
-                if (err){
-                    closeDb(db);
-                    reject(err);
-
-                }
-
-                console.log("Json Favourites :\n"+JSON.stringify(result));
+        db.query(sql, (err, result) => {
+            if (err) {
                 closeDb(db);
-                resolve(result);
-            });
+                reject(err);
+
+            }
+
+            console.log("Json Favourites :\n" + JSON.stringify(result));
+            closeDb(db);
+            resolve(result);
+        });
 
 
     });
@@ -208,7 +205,7 @@ async function getFavouriteShows(req, res) {
 
 async function getShowById(db, id) {
     return new Promise((resolve, reject) => {
-    const db = connectDb();
+        const db = connectDb();
         console.log("in getShowById");
         let sql = `SELECT * FROM shows WHERE id = '${id}'`;
 
@@ -224,14 +221,14 @@ async function getShowById(db, id) {
     });
 
 }
-async function asyncQuery(db,sql){
-    return new Promise( (resolve,reject)=>{
-        db.query(sql,(err, result)=>{
+async function asyncQuery(db, sql) {
+    return new Promise((resolve, reject) => {
+        db.query(sql, (err, result) => {
             closeDb(db);
 
-            if(err){
+            if (err) {
                 reject(err);
-            }else {
+            } else {
                 resolve(result);
             }
 
@@ -249,11 +246,13 @@ async function insertShow(req, res) {
             const myShow = req.body
             const userId = myShow.userId;
             console.log("userId: ", userId);
-            const receivedShow = { name: myShow.name,
-                                language: myShow.language,
-                                premiered: myShow.premiered,
-                                rating: myShow.rating,
-                                imageUrl: myShow.imageUrl};
+            const receivedShow = {
+                name: myShow.name,
+                language: myShow.language,
+                premiered: myShow.premiered,
+                rating: myShow.rating,
+                imageUrl: myShow.imageUrl
+            };
 
             const key1 = myShow.name.slice(1, myShow.name.length - 1);
             console.log("key1: ", key1);
@@ -268,33 +267,33 @@ async function insertShow(req, res) {
                 language: key2,
                 premiered: myShow.premiered.slice(1, myShow.premiered.length - 1),
                 rating: !myShow.rating ? 0 : myShow.rating,
-                imageUrl : myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
+                imageUrl: myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
             };
 
             await shows.insertNewShow(db, newShow);
 
-            let userShowSql = 'INSERT INTO userShow (userId, showId)'+
-             'SELECT "' + userId + '","' + receivedShowId + '" '+
-             'WHERE NOT EXISTS (SELECT * FROM userShow WHERE userId = "' + userId + '" and showId = "' + receivedShowId + '");\r\n';
-            let genres=null;
-            await asyncQuery(connectDb(),userShowSql);
+            let userShowSql = 'INSERT INTO userShow (userId, showId)' +
+                'SELECT "' + userId + '","' + receivedShowId + '" ' +
+                'WHERE NOT EXISTS (SELECT * FROM userShow WHERE userId = "' + userId + '" and showId = "' + receivedShowId + '");\r\n';
+            let genres = null;
+            await asyncQuery(connectDb(), userShowSql);
 
-            if(myShow.genres && (genres = JSON.parse(myShow.genres)) ) {
+            if (myShow.genres && (genres = JSON.parse(myShow.genres))) {
                 genres.forEach(async genre => {
                     console.log('genre: ' + genre);
                     genreField = genre;
-                    let genreSql= 'INSERT INTO genres (name) SELECT "' + genre + '" WHERE NOT EXISTS (SELECT * FROM genres WHERE name = "' + genre + '");';
-                    let genreShowSql = 'INSERT INTO genresShows (genre , showId) SELECT "' + genre + '","' + receivedShowId + '" '+
-                    'WHERE NOT EXISTS (SELECT * FROM genresShows WHERE genre = "' + genre + '" and showId = "' + receivedShowId + '");';
-                    await asyncQuery(connectDb(),genreSql);
-                    await asyncQuery(connectDb(),genreShowSql);
+                    let genreSql = 'INSERT INTO genres (name) SELECT "' + genre + '" WHERE NOT EXISTS (SELECT * FROM genres WHERE name = "' + genre + '");';
+                    let genreShowSql = 'INSERT INTO genresShows (genre , showId) SELECT "' + genre + '","' + receivedShowId + '" ' +
+                        'WHERE NOT EXISTS (SELECT * FROM genresShows WHERE genre = "' + genre + '" and showId = "' + receivedShowId + '");';
+                    await asyncQuery(connectDb(), genreSql);
+                    await asyncQuery(connectDb(), genreShowSql);
 
 
                 });
             }
         }
         catch (error) {
-            console.log('Cought this:',error);
+            console.log('Cought this:', error);
             console.log(error.message);
             res.sendStatus(500);
         }
@@ -436,7 +435,7 @@ async function createUser(userData) {
                 reject(err);
 
             }
-            if(result.insertId){
+            if (result.insertId) {
                 insertedUserId = result.insertId;
                 console.log("Inserted user id: " + result.insertId);
             }
