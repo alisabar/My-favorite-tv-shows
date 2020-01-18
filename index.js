@@ -4,7 +4,6 @@ const express = require('express');
 const shows = require('./shows');
 const Joi = require('@hapi/joi');
 const mysql = require('mysql');
-var cookieParser = require('cookie-parser');
 const TWO_HOURS = 1000 * 360 * 2;
 const {
     PORT = 5000,
@@ -21,7 +20,10 @@ const app = express()
 const connectDb = function () {
     console.log('In function connectDB');
     db = mysql.createConnection({
-
+        host: "localhost",
+        user: "root",
+        password: "root123",
+        database: "myshows"
     });
     console.log('createConnection');
     db.connect(err => {
@@ -103,7 +105,12 @@ app.post('/api/addFavouriteShow', async (req, res) => {
 
     await insertShow(req, res);
 
+});
 
+app.post('/api/deleteFavouriteShow', async (req, res) => {
+    console.log('deleteFavouriteShow body: ', req.body);
+
+    await deleteShow(req, res);
 
 });
 
@@ -148,6 +155,7 @@ async function getUserFavouriteShows(req, res) {
 
                 var rObj = {};
                 rObj["name"] = item.name ? item.name : '';
+                rObj["id"] = item.id ? item.id : '';
                 rObj["language"] = item.language ? item.language : '';
                 rObj["premiered"] = item.premiered ? item.premiered : '';
                 rObj["rating"] = item.rating ? item.rating : '';
@@ -175,7 +183,7 @@ async function getFavouriteShows(req, res) {
         const user_id = req.body.userId;
         console.log("in getFavouriteShows user id: " + user_id);
 
-        let sql = `select  shows.name, shows.language, shows.premiered , shows.rating, shows.imageUrl ,
+        let sql = `select  shows.id ,shows.name, shows.language, shows.premiered , shows.rating, shows.imageUrl ,
                   GROUP_CONCAT(genresshows.genre) as genre
                   from genresshows join shows
                   where genresshows.showId = shows.id and genresshows.showId in
@@ -237,13 +245,33 @@ async function asyncQuery(db, sql) {
 
 }
 
+async function deleteShow(req, res) {
+  return new Promise(async (resolve, reject) => {
+        try {
+            console.log("In deleteShow");
+            const db = connectDb();
+            const userId = req.body.userId;
+            const showName = req.body.name;
+            const showId = await shows.getShowIdByName(db, showName);
+            console.log("showId: ", showId);
+            await shows.deleteFavoriteShow(db, showId, userId);
+            res.json({msg:"Deleted"});
+        }
+        catch (error) {
+            console.log('Cought this:', error);
+            console.log(error.message);
+            res.sendStatus(500);
+        }
+  });
+}
+
 async function insertShow(req, res) {
     return new Promise(async (resolve, reject) => {
         try {
 
             console.log("In insertShow");
             const db = connectDb();
-            const myShow = req.body
+            const myShow = req.body;
             const userId = myShow.userId;
             console.log("userId: ", userId);
             const receivedShow = {
@@ -268,6 +296,7 @@ async function insertShow(req, res) {
                 premiered: myShow.premiered.slice(1, myShow.premiered.length - 1),
                 rating: !myShow.rating ? 0 : myShow.rating,
                 imageUrl: myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
+
             };
 
             await shows.insertNewShow(db, newShow);
@@ -291,10 +320,22 @@ async function insertShow(req, res) {
 
                 });
             }
+            resolve('success');
+            const MyShow = {
+                id: receivedShowId,
+                name: key1,
+                language: key2,
+                premiered: myShow.premiered.slice(1, myShow.premiered.length - 1),
+                rating: !myShow.rating ? 0 : myShow.rating,
+                imageUrl: myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
+                genres: myShow.genres ? JSON.parse(myShow.genres) : ''
+            };
+            res.json({show: MyShow});
         }
         catch (error) {
             console.log('Cought this:', error);
             console.log(error.message);
+            reject(error);
             res.sendStatus(500);
         }
 

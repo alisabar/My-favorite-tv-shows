@@ -63,33 +63,62 @@ module.exports = {
         const id = show.name + show.language;
         return id;
     },
+    getShowIdByName: function(db, showName){
+                return new Promise(function (resolve, reject) {
+
+                        console.log("in getShowIdByName");
+                        let sql = `SELECT id FROM shows WHERE name = ${showName}`;
+
+                        console.log(sql);
+                        let query = db.query(sql, (err, result) => {
+                            if (err) {
+
+                                reject(err);
+                                throw err;
+
+                            }
+                            resolve(result);
+                        });
+                });
+    },
+    deleteFavoriteShow: function(db, showId, userId){
+        return new Promise(function (resolve, reject) {
+
+                console.log("in deleteFavoriteShow");
+                let sql = `DELETE FROM usershow WHERE ShowId = ${showId} AND userId= ${userId}`;
+                console.log(sql);
+                let query = db.query(sql, (err, result) => {
+                    if (err) {
+
+                        reject(err);
+                        throw err;
+
+                    }
+                    resolve('Successfully deleted!');
+                });
+        });
+    },
     insertNewShow: function (db, newShow) {
         return new Promise(function (resolve, reject) {
 
             console.log("in insertNewShow");
             console.log(newShow);
-            //let sql1 =
-//             'IF NOT EXISTS (SELECT * FROM shows where id ="' + newShow.id + '")' +
-//                'INSERT INTO shows (id, name, language, premiered, rating, imageUrl) VALUES
-//
-//               ("' + newShow.id + '","' + newShow.name + '","' + newShow.language + '","' + newShow.premiered + '","' + newShow.rating + '","' + newShow.imageUrl + '")';
 
                 let sql1 ='INSERT INTO shows (id, name, language, premiered, rating, imageUrl)'+
                 'SELECT "' + newShow.id + '" ,"' + newShow.name + '" ,"' + newShow.language + '" ,"' + newShow.premiered + '" ,"' + newShow.rating + '" ,"' + newShow.imageUrl + '" '+
                 'WHERE NOT EXISTS (SELECT * FROM shows WHERE id = "' + newShow.id + '");'
                 console.log(sql1);
-            let query1 = db.query(sql1, (err, result) => {
-                if (err) {
+                let query1 = db.query(sql1, (err, result) => {
+                    if (err) {
 
-                    reject(err);
-                    // return;
-                    throw err;
+                        reject(err);
+                        throw err;
 
-                }
-                const showId = result;
-                console.log("inserted show showId: " + showId);
-                resolve('Success!');
-            });
+                    }
+                    const showId = result;
+                    console.log("inserted show showId: " + showId);
+                    resolve('Success!');
+                });
         });
     }
 

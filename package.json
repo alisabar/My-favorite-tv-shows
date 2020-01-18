@@ -1,22 +1,29 @@
 {
-  "name": "nodeExamples",
+  "name": "TvShows",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alisabar/My-favorite-tv-shows.git"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alisabar/My-favorite-tv-shows/issues"
+  },
+  "homepage": "https://github.com/alisabar/My-favorite-tv-shows#readme",
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.4",
-    "express": "~4.16.4",
-    "express-session": "^1.16.2",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
     "mysql": "^2.17.1",
-    "nodemon": "^1.19.1",
+    "nodemon": "^2.0.2",
     "request": "^2.88.0"
   }
 }
