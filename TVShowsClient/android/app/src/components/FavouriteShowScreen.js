@@ -19,7 +19,7 @@ function mapDispatchToProps(dispatch) {
         dispatchActions: bindActionCreators(actions, dispatch)
     }
 }
-export default class FavouriteShowScreen extends React.Component {
+class FavouriteShowScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Details',
@@ -53,7 +53,7 @@ export default class FavouriteShowScreen extends React.Component {
 
     this.setState({
       defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 100, height: 100, }} />,
-      id: item ? JSON.stringify(item.id)  : '',
+      showId: item ? JSON.stringify(item.id)  : '',
       name: item ? JSON.stringify(item.name)  : '',
       language: item ? JSON.stringify(item.language) :  '',
       premiered: item ? JSON.stringify(item.premiered) :  '',
@@ -78,8 +78,8 @@ export default class FavouriteShowScreen extends React.Component {
   deleteShow = () => {
 
       const { navigate } = this.props.navigation;
-      const { dispatchActions } = this.props
-      const showId = this.state.showId ? this.state.showId : '',
+      const { dispatchActions } = this.props;
+      const showId = this.state.showId ? this.state.showId : '';
       dispatchActions.deleteFavorite(showId);
 
     console.log('submit deleteFavouriteShow pressed');
@@ -186,50 +186,33 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   heading: {
-  flex:1,
-
-//    marginLeft: 15,
-//    color: '#000080',
-//    fontSize: 20,
-//    fontWeight: 'bold',
-//    marginBottom: 20,
-
+    flex:1,
   },
   button: {
-
     fontSize: 15,
     color: 'white',
   },
   touchable: {
-
-
-        padding: 10,
-        height: 30,
-        width: 50,
-        backgroundColor: '#000080',
-        //textAlign: 'center',
-        borderRadius: 30,
-        alignSelf:'center',
-
+    padding: 10,
+    height: 30,
+    width: 50,
+    backgroundColor: '#000080',
+    borderRadius: 30,
+    alignSelf:'center',
   },
   row:{
     flex:1,
     flexDirection: 'row',
-    //justifyContent: 'space-around',
     alignItems: 'flex-start',
-
-
   },
   image:{
-    //alignSelf:'center',
      flex:3,
      flexDirection: 'row',
      justifyContent: 'center',
-
-
   },
   info:{
     flex: 1,
   },
 
 });
+export default connect(mapStateToProps, mapDispatchToProps)(FavouriteShowScreen)

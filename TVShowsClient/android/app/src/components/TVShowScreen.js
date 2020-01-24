@@ -2,7 +2,24 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
-export default class TVShowScreen extends React.Component {
+import * as actions from './ReduxStore/actions'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+
+function mapStateToProps(initialState) {
+    console.log('initial state : ', initialState);
+    return {
+
+        MyTVShows: initialState
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatchActions: bindActionCreators(actions, dispatch)
+    }
+}
+
+class TVShowScreen extends React.Component {
   static navigationOptions = {
     title: 'Details',
   };
@@ -55,6 +72,7 @@ export default class TVShowScreen extends React.Component {
   }
   submitFavourite = () => {
     const { navigate } = this.props.navigation;
+    const { dispatchActions } = this.props
     console.log('submit favourite pressed');
     if (this.state.userId.length > 0) {
       fetch(URL.concat('/api/addFavouriteShow'), {
@@ -165,12 +183,6 @@ const styles = StyleSheet.create({
   heading: {
     flex: 1,
 
-    //    marginLeft: 15,
-    //    color: '#000080',
-    //    fontSize: 20,
-    //    fontWeight: 'bold',
-    //    marginBottom: 20,
-
   },
   button: {
 
@@ -184,7 +196,6 @@ const styles = StyleSheet.create({
     height: 30,
     width: 50,
     backgroundColor: '#000080',
-    //textAlign: 'center',
     borderRadius: 30,
     alignSelf: 'center',
 
@@ -192,21 +203,19 @@ const styles = StyleSheet.create({
   row: {
     flex: 1,
     flexDirection: 'row',
-    //justifyContent: 'space-around',
     alignItems: 'flex-start',
 
 
   },
   image: {
-    //alignSelf:'center',
+
     flex: 3,
     flexDirection: 'row',
     justifyContent: 'center',
-
-
   },
   info: {
     flex: 1,
   },
 
 });
+export default connect(mapStateToProps, mapDispatchToProps)(TVShowScreen)

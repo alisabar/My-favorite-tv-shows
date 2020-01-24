@@ -1,71 +1,82 @@
 import React from 'react';
-import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
+import { Platform,
+StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import FavouriteShowScreen from './FavouriteShowScreen.js';
 import TVShowComponent from './TVshow.js';
 import {URL} from'./Config.js';
+import * as actions from './ReduxStore/actions'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
 import { useDispatch, useSelector } from "react-redux";
 
-export default class MyFavouriteShows extends React.Component {
 
+function MyFavouriteShows(props) {
 
-    static navigationOptions = {
-        title: 'My Shows',
-    };
+   const [shows, setShows] = useState('');
+//    constructor(props) {
+//        super(props);
+//        this.getUserId = this.getUserId.bind(this);
+//        this.state = { favouriteShows: '', msg: 'lalala', shows: '' };
+//    }
+   useEffect(() => {
+        const showsData = useSelector(state => state.favoriteShows);
 
-    constructor(props) {
-        super(props);
-        this.getUserId = this.getUserId.bind(this);
-        this.state = { favouriteShows: '', msg: 'lalala', shows: '' };
-    }
+        if(showsData){this.createListComponents(showsData);}
 
-    componentDidMount() {
-        console.log("in favourites componentDidMount");
-        this.getUserId().then((userId) => {
+    }, [showsData])
+//    const handleOpenWeather = () => {
+//        setShows(true);
+//    }
+//    componentDidMount() {
+//        console.log("in favourites componentDidMount");
+//        this.getUserId().then((userId) => {
+//
+//            console.log("user id extracted: "+userId);
+//            if (userId !== null) {
+//                fetch(URL.concat('/api/getMyFavouriteShows'), {
+//                    method: 'POST',
+//                    headers: {
+//                        Accept: 'application/json',
+//                        'Content-Type': 'application/json',
+//                    },
+//                    body: JSON.stringify({
+//                        userId: userId
+//                    }),
+//                })
+//                    .then((response) => response.json())
+//                    .then((responseJson) => {
+//                        console.log('responseJson favourites: ', responseJson);
+//                        this.setState({
+//                            favouriteShows: JSON.parse(responseJson),
+//                        },() => this.createListComponents());
+//                    })
+//                    .catch((error) => {
+//                        console.error(error);
+//                    });
+//            }
+//
+//        }).catch((error) => {
+//            console.log('Promise is rejected with error: ' + error);
+//        });
+//
+//    }
+//
+//    getUserId = async () => {
+//        try {
+//          const retrievedItem =  await AsyncStorage.getItem('userId');
+//
+//          return retrievedItem;
+//        } catch (error) {
+//          console.log(error.message);
+//        }
+//        return
+//      }
 
-            console.log("user id extracted: "+userId);
-            if (userId !== null) {
-                fetch(URL.concat('/api/getMyFavouriteShows'), {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        userId: userId
-                    }),
-                })
-                    .then((response) => response.json())
-                    .then((responseJson) => {
-                        console.log('responseJson favourites: ', responseJson);
-                        this.setState({
-                            favouriteShows: JSON.parse(responseJson),
-                        },() => this.createListComponents());
-                    })
-                    .catch((error) => {
-                        console.error(error);
-                    });
-            }
+    createListComponents = (showsData) => {
+        //let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
+        //const showsData = useSelector(state => state.favoriteShows);
 
-        }).catch((error) => {
-            console.log('Promise is rejected with error: ' + error);
-        });
-
-    }
-
-    getUserId = async () => {
-        try {
-          const retrievedItem =  await AsyncStorage.getItem('userId');
-
-          return retrievedItem;
-        } catch (error) {
-          console.log(error.message);
-        }
-        return
-      }
-
-    createListComponents = () => {
-        let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
         console.log("createListComponents favourites:");
         console.log(showsData);
         let button = [];
@@ -89,23 +100,27 @@ export default class MyFavouriteShows extends React.Component {
         else {
             button = <Text style={styles.text}>hi</Text>;
         }
-        this.setState({ shows: button });
+        setShows(button);
+
     }
-    render() {
+
 
         return (
         <View style={styles.container}>
             <View style={{ flex: 5, flexDirection: 'column' }}>
 
-                {this.state.shows ?
-                            this.state.shows : <ActivityIndicator size="large" color="#0000ff" />}
+                {shows ?
+                            shows : <ActivityIndicator size="large" color="#0000ff" />}
 
             </View>
         </View>
         );
-    }
-}
 
+}
+MyFavouriteShows.navigationOptions = () => {(
+    title: 'My Shows'
+)}
+export default MyFavouriteShows;
 const styles = StyleSheet.create({
 
     container: {
@@ -129,3 +144,4 @@ const styles = StyleSheet.create({
     },
 
 });
+

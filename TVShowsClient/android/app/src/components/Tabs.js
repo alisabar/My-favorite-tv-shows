@@ -3,7 +3,6 @@ import { createAppContainer, createSwitchNavigator  } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
 
-
 import MyRegistration from './RegistrationScreen.js';
 import MyLogin from './LoginScreen.js';
 import FavouriteScreen from './Favourites.js';
