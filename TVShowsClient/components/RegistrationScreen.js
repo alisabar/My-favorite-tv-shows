@@ -4,9 +4,9 @@ import { Text, View, StyleSheet, TextInput, TouchableHighlight, Modal } from 're
 
 export default class MyRegistration extends React.Component {
 
-  //  static navigationOptions = {
-  //    title: 'Sign-Up',
-  //  };
+    static navigationOptions = {
+      title: 'Sign-Up',
+    };
 
   constructor(props) {
     super(props);
@@ -32,7 +32,7 @@ export default class MyRegistration extends React.Component {
   }
   componentDidMount = () => {
     this.setState({ modalVisible: false, msg: '' });
-
+console.log("In register component did mount. modalVisible: "+ this.state.modalVisible);
   }
   validateEmail = (email) => {
 
@@ -112,6 +112,8 @@ export default class MyRegistration extends React.Component {
   }
 
   render() {
+
+  console.log("in register");
     if (this.state.modalVisible == false) {
       return (
         <View style={styles.container}>
@@ -197,8 +199,6 @@ export default class MyRegistration extends React.Component {
               </View>
             </View>
           </Modal>
-
-
         </View>
       );
     }

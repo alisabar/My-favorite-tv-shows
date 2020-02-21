@@ -27,6 +27,7 @@ export default class HomeScreen extends Component {
 
   componentDidMount = () => {
     this.fetchData();
+    console.log("in component did home");
   }
 
   fetchData = () => {

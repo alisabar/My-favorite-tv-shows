@@ -1,8 +1,8 @@
 import React from 'react';
-import {NetworkInfo} from 'react-native-network-info';
 import { Text, View, StyleSheet, TextInput, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
+
 export default class MyLogin extends React.Component {
 
   static navigationOptions = {
@@ -60,8 +60,12 @@ export default class MyLogin extends React.Component {
       this.setState({ password: pass, is_pass_valid: false, valid_pass_msg: 'Password should contain numbers and letters.' });
     }
   }
-  componentDidUpdate = (prevProps, prevState) => {
+    componentDidMount = () => {
+      console.log("component did mount login");
 
+    }
+  componentDidUpdate = (prevProps, prevState) => {
+    console.log("componentDidUpdate at login");
     const { navigation } = this.props;
     const receivedEmail = navigation.getParam('email', '');
     const receivedPass = navigation.getParam('password', '');
@@ -113,7 +117,7 @@ export default class MyLogin extends React.Component {
               await AsyncStorage.setItem('userId', this.state.msg);
 
               console.log('after set item in async state');
-              navigate('MyFavourites');
+             // navigate('MyFavourites');
             } catch (e) {
               console.log(e);
             }
@@ -142,12 +146,12 @@ export default class MyLogin extends React.Component {
   }
 
   render() {
-
+    console.log("in login");
     return (
       <View style={styles.container}>
         <Text style={styles.title}>
           Log In
-                 </Text>
+        </Text>
         <Text style={styles.msg}>
           {this.state.msg ? this.state.msg : ''}
         </Text>

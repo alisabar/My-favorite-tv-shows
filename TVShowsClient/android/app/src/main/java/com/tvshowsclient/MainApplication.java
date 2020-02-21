@@ -2,6 +2,8 @@ package com.tvshowsclient;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
+
 import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.facebook.react.ReactNativeHost;
@@ -61,13 +63,15 @@ public class MainApplication extends Application implements ReactApplication {
         Class<?> aClass = Class.forName("com.facebook.flipper.ReactNativeFlipper");
         aClass.getMethod("initializeFlipper", Context.class).invoke(null, context);
       } catch (ClassNotFoundException e) {
-        e.printStackTrace();
+        Log.e("ALISA_BET_APP","initializeFlipper"+e.getClass().getName()+" "+e.getMessage());
+
       } catch (NoSuchMethodException e) {
-        e.printStackTrace();
+          Log.e("ALISA_BET_APP","initializeFlipper"+e.getClass().getName()+" "+e.getMessage());
+
       } catch (IllegalAccessException e) {
-        e.printStackTrace();
+          Log.e("ALISA_BET_APP","initializeFlipper"+e.getClass().getName()+" "+e.getMessage());
       } catch (InvocationTargetException e) {
-        e.printStackTrace();
+          Log.e("ALISA_BET_APP","initializeFlipper"+e.getClass().getName()+" "+e.getMessage());
       }
     }
   }

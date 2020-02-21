@@ -5,10 +5,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import FavouriteShowScreen from './FavouriteShowScreen.js';
 import TVShowComponent from './TVshow.js';
 import {URL} from'./Config.js';
-import * as actions from './ReduxStore/actions'
-import { connect } from 'react-redux'
-import { bindActionCreators } from 'redux';
-import { useDispatch, useSelector } from "react-redux";
+//import * as actions from './ReduxStore/actions'
+//import { connect } from 'react-redux'
+//import { bindActionCreators } from 'redux';
+//import { useDispatch, useSelector } from "react-redux";
 
 
 function MyFavouriteShows(props) {
@@ -19,12 +19,12 @@ function MyFavouriteShows(props) {
 //        this.getUserId = this.getUserId.bind(this);
 //        this.state = { favouriteShows: '', msg: 'lalala', shows: '' };
 //    }
-   useEffect(() => {
-        const showsData = useSelector(state => state.favoriteShows);
-
-        if(showsData){this.createListComponents(showsData);}
-
-    }, [showsData])
+//   useEffect(() => {
+//        const showsData = useSelector(state => state.favoriteShows);
+//
+//        if(showsData){this.createListComponents(showsData);}
+//
+//    }, [showsData])
 //    const handleOpenWeather = () => {
 //        setShows(true);
 //    }
@@ -120,7 +120,7 @@ function MyFavouriteShows(props) {
 MyFavouriteShows.navigationOptions = () => {(
     title: 'My Shows'
 )}
-export default MyFavouriteShows;
+
 const styles = StyleSheet.create({
 
     container: {
@@ -145,3 +145,4 @@ const styles = StyleSheet.create({
 
 });
 
+export default MyFavouriteShows;

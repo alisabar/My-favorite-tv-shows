@@ -8,25 +8,25 @@ import {ReactDOM} from 'react-dom';
 import {render} from 'react-dom'
 import App from './App';
 import {name as appName} from './app.json';
-import rootReducer from './android/app/src/components/ReduxStore/reducers';
+import rootReducer from './components/ReduxStore/reducers';
 import { Provider } from 'react-redux'
-import {createStore,applyMiddleware} from 'redux';
+import {createStore, applyMiddleware, combineReducers} from 'redux';
 
 
-const store = createStore(rootReducer);
+const store = createStore(combineReducers({rootReducer}));
 export default class MyApp extends Component {
 
   render() {
   console.log('in index.js');
     return(
-        <View style={styles.container}><Provider store={store}><App/></Provider></View>
+        <View>
+            <Provider store={store}>
+                 <App/>
+            </Provider>
+        </View>
     );
     }
-    }
+}
+
 
 AppRegistry.registerComponent(appName, () => MyApp);
-
-const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: 'center', justifyContent: 'center' }
-
-  })
