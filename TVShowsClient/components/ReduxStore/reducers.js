@@ -1,6 +1,6 @@
 import {GET_FAVORITE_SHOWS, ADD_FAVORITE_SHOW, DELETE_FAVORITE_SHOW} from './actions'
 
-const initialState = {
+export const initialState = {
     favoriteShows: [
 
     ]

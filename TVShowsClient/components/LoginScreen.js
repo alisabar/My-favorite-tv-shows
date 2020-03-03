@@ -117,7 +117,7 @@ export default class MyLogin extends React.Component {
               await AsyncStorage.setItem('userId', this.state.msg);
 
               console.log('after set item in async state');
-             // navigate('MyFavourites');
+              navigate('MyFavourites');
             } catch (e) {
               console.log(e);
             }

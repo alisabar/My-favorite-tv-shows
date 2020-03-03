@@ -19,11 +19,10 @@ export default class MyApp extends Component {
   render() {
   console.log('in index.js');
     return(
-        <View>
             <Provider store={store}>
                  <App/>
             </Provider>
-        </View>
+
     );
     }
 }

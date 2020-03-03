@@ -2,7 +2,6 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator  } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
-
 import MyRegistration from './RegistrationScreen.js';
 import MyLogin from './LoginScreen.js';
 import FavouriteScreen from './Favourites.js';
@@ -10,58 +9,63 @@ import TVShowScreen from './TVShowScreen.js';
 import HomeScreen from './HomeScreen.js';
 import FavouriteShowScreen from './FavouriteShowScreen.js';
 
-//const AppNavigator = createStackNavigator(
-//    {
-//        HomeScreen: HomeScreen,
-//        TVShowScreen: TVShowScreen,
-//    },
-//    {
-//        initialRouteName: "HomeScreen"
-//    }
-//
-//);
+const AppNavigator = createStackNavigator(
+    {
+        HomeScreen: HomeScreen,
+        TVShowScreen: TVShowScreen,
+    },
+    {
+        initialRouteName: "HomeScreen"
+    }
 
-//const MyShowsContainer = createStackNavigator(
-//    {
-//        FavouritesScreen: FavouriteScreen,
-//        FavouriteShow: FavouriteShowScreen,
-//    },
-//    {
-//        initialRouteName: "FavouritesScreen"
-//    }
-//
-//);
+);
 
-const TabNavigator = createMaterialTopTabNavigator({
+const MyShowsContainer = createStackNavigator(
+    {
+        FavouritesScreen: FavouriteScreen,
+        FavouriteShow: FavouriteShowScreen,
+    },
+    {
+        initialRouteName: "FavouritesScreen"
+    }
 
-    Signup: MyRegistration,
-    Login: MyLogin,
+);
 
-});
+const TabNavigator = createMaterialTopTabNavigator(
+    {
+        Signup: MyRegistration,
+        Login: MyLogin,
+    },
 
-//const LoggedInNavigator = createMaterialTopTabNavigator(
-//    {
-//        Home: AppNavigator,
-//        MyShows: MyShowsContainer,
-//    },
-//    {
-//        initialRouteName: "Home"
-//    }
-//
-//
-//);
+    {
+        initialRouteName: "Login"
+    }
 
-//const LoginStackNavigator = createSwitchNavigator(
-//    {
-//        Tab: TabNavigator,
-//        MyFavourites: LoggedInNavigator,
-//    },
-//    {
-//        initialRouteName: "Tab"
-//    }
-//
-//);
+);
 
-//export default createAppContainer(LoginStackNavigator);
+const LoggedInNavigator = createMaterialTopTabNavigator(
+    {
+        Home: AppNavigator,
+        MyShows: MyShowsContainer,
+    },
+    {
+        initialRouteName: "Home"
+    }
 
-export default createAppContainer(TabNavigator);
+
+);
+
+const LoginStackNavigator = createSwitchNavigator(
+    {
+        Tab: TabNavigator,
+        MyFavourites: LoggedInNavigator,
+    },
+    {
+        initialRouteName: "Tab"
+    }
+
+);
+
+export default createAppContainer(LoginStackNavigator);
+
+//export default createAppContainer(TabNavigator);

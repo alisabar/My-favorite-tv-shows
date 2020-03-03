@@ -2,24 +2,24 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
-//import * as actions from './ReduxStore/actions'
-//import { connect } from 'react-redux'
-//import { bindActionCreators } from 'redux';
+import * as actions from './ReduxStore/actions'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
 
 
-//function mapStateToProps(initialState) {
-//    console.log('initial state : ', initialState);
-//    return {
-//
-//        MyTVShows: initialState
-//    }
-//}
-//function mapDispatchToProps(dispatch) {
-//    return {
-//        dispatchActions: bindActionCreators(actions, dispatch)
-//    }
-//}
-export default class FavouriteShowScreen extends React.Component {
+function mapStateToProps(initialState) {
+    console.log('initial state : ', initialState);
+    return {
+
+        MyTVShows: initialState
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatchActions: bindActionCreators(actions, dispatch)
+    }
+}
+class FavouriteShowScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Details',
@@ -215,4 +215,4 @@ const styles = StyleSheet.create({
   },
 
 });
-//export default connect(mapStateToProps, mapDispatchToProps)(FavouriteShowScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(FavouriteShowScreen);

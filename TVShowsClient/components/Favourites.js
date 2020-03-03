@@ -1,33 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect ,useReducer } from 'react';
 import { Platform,
 StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import FavouriteShowScreen from './FavouriteShowScreen.js';
-import TVShowComponent from './TVshow.js';
+import TVShowComponent from './TVshow.js'
 import {URL} from'./Config.js';
-//import * as actions from './ReduxStore/actions'
-//import { connect } from 'react-redux'
-//import { bindActionCreators } from 'redux';
-//import { useDispatch, useSelector } from "react-redux";
-
+import * as actions from './ReduxStore/actions'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { useDispatch, useSelector } from "react-redux"
+import {rootReducer , initialState} from './ReduxStore/reducers'
 
 function MyFavouriteShows(props) {
 
    const [shows, setShows] = useState('');
-//    constructor(props) {
-//        super(props);
-//        this.getUserId = this.getUserId.bind(this);
-//        this.state = { favouriteShows: '', msg: 'lalala', shows: '' };
-//    }
-//   useEffect(() => {
-//        const showsData = useSelector(state => state.favoriteShows);
-//
-//        if(showsData){this.createListComponents(showsData);}
-//
-//    }, [showsData])
-//    const handleOpenWeather = () => {
-//        setShows(true);
-//    }
+   const [myFavoriteSh, dispatch] = useReducer(rootReducer, initialState);
+
+   useEffect(() => {
+        let mounted = true;
+        if(mounted){
+            MyFavouriteShows.navigationOptions = () => {(
+                title: ('My Shows')
+            )}
+    //            let showsData = useSelector(state => state.favoriteShows);
+    //
+    //            let components = showsData ? this.createListComponents() : false
+            if(myFavoriteSh.favoriteShows){
+                createListComponents()
+            }
+        }
+        return () => mounted = false;
+    }, [myFavoriteSh.favoriteShows])
+    const handleOpenWeather = () => {
+        setShows(true);
+    }
 //    componentDidMount() {
 //        console.log("in favourites componentDidMount");
 //        this.getUserId().then((userId) => {
@@ -73,9 +79,9 @@ function MyFavouriteShows(props) {
 //        return
 //      }
 
-    createListComponents = (showsData) => {
+    createListComponents = () => {
         //let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
-        //const showsData = useSelector(state => state.favoriteShows);
+        const showsData = useSelector(state => state.favoriteShows);
 
         console.log("createListComponents favourites:");
         console.log(showsData);
@@ -117,9 +123,7 @@ function MyFavouriteShows(props) {
         );
 
 }
-MyFavouriteShows.navigationOptions = () => {(
-    title: 'My Shows'
-)}
+
 
 const styles = StyleSheet.create({
 
