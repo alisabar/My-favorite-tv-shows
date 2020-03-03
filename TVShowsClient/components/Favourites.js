@@ -22,64 +22,18 @@ function MyFavouriteShows(props) {
             MyFavouriteShows.navigationOptions = () => {(
                 title: ('My Shows')
             )}
-    //            let showsData = useSelector(state => state.favoriteShows);
-    //
-    //            let components = showsData ? this.createListComponents() : false
-            if(myFavoriteSh.favoriteShows){
-                createListComponents()
+
+          if(myFavoriteSh.favoriteShows){
+                //createListComponents()
             }
         }
         return () => mounted = false;
     }, [myFavoriteSh.favoriteShows])
+
     const handleOpenWeather = () => {
         setShows(true);
     }
-//    componentDidMount() {
-//        console.log("in favourites componentDidMount");
-//        this.getUserId().then((userId) => {
-//
-//            console.log("user id extracted: "+userId);
-//            if (userId !== null) {
-//                fetch(URL.concat('/api/getMyFavouriteShows'), {
-//                    method: 'POST',
-//                    headers: {
-//                        Accept: 'application/json',
-//                        'Content-Type': 'application/json',
-//                    },
-//                    body: JSON.stringify({
-//                        userId: userId
-//                    }),
-//                })
-//                    .then((response) => response.json())
-//                    .then((responseJson) => {
-//                        console.log('responseJson favourites: ', responseJson);
-//                        this.setState({
-//                            favouriteShows: JSON.parse(responseJson),
-//                        },() => this.createListComponents());
-//                    })
-//                    .catch((error) => {
-//                        console.error(error);
-//                    });
-//            }
-//
-//        }).catch((error) => {
-//            console.log('Promise is rejected with error: ' + error);
-//        });
-//
-//    }
-//
-//    getUserId = async () => {
-//        try {
-//          const retrievedItem =  await AsyncStorage.getItem('userId');
-//
-//          return retrievedItem;
-//        } catch (error) {
-//          console.log(error.message);
-//        }
-//        return
-//      }
-
-    createListComponents = () => {
+    const createListComponents = () => {
         //let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
         const showsData = useSelector(state => state.favoriteShows);
 
@@ -110,8 +64,7 @@ function MyFavouriteShows(props) {
 
     }
 
-
-        return (
+    return (
         <View style={styles.container}>
             <View style={{ flex: 5, flexDirection: 'column' }}>
 
