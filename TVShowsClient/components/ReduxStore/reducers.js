@@ -18,7 +18,7 @@ const rootReducer = (state = initialState, action) => {
             favoriteShows: action.payload
 
       })
-    case ADD_FAVORITE_SHOW:a
+    case ADD_FAVORITE_SHOW:
         return Object.assign({}, state, {
              favoriteShows: [
                    ...state.favoriteShows,

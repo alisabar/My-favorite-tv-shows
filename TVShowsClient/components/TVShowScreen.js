@@ -2,24 +2,24 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
-//import * as actions from './ReduxStore/actions'
-//import { connect } from 'react-redux'
-//import { bindActionCreators } from 'redux';
+import * as actions from './ReduxStore/actions.js';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-//function mapStateToProps(initialState) {
-//    console.log('initial state : ', initialState);
-//    return {
-//
-//        MyTVShows: initialState
-//    }
-//}
-//function mapDispatchToProps(dispatch) {
-//    return {
-//        dispatchActions: bindActionCreators(actions, dispatch)
-//    }
-//}
+function mapStateToProps(initialState) {
+    console.log('initial state in : TVShowScreen ', initialState);
+    return {
 
-export default class TVShowScreen extends React.Component {
+        MyTVShows: initialState
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatchActions: bindActionCreators(actions, dispatch)
+    }
+}
+
+class TVShowScreen extends React.Component {
   static navigationOptions = {
     title: 'Details',
   };
@@ -73,6 +73,7 @@ export default class TVShowScreen extends React.Component {
   submitFavourite = () => {
     const { navigate } = this.props.navigation;
     const { dispatchActions } = this.props
+
     console.log('submit favourite pressed');
     if (this.state.userId.length > 0) {
       fetch(URL.concat('/api/addFavouriteShow'), {
@@ -96,7 +97,7 @@ export default class TVShowScreen extends React.Component {
           console.log('responseJson after addFavouriteShow: ', responseJson);
           dispatchActions.addFavorite(responseJson.show);
           //todo modal
-          //navigate('Home');
+          navigate('FavouritesScreen');
 //          this.setState({
 //            msg: responseJson.msg,
 //            showId: responseJson.id
@@ -219,4 +220,4 @@ const styles = StyleSheet.create({
   },
 
 });
-//export default connect(mapStateToProps, mapDispatchToProps)(TVShowScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(TVShowScreen)

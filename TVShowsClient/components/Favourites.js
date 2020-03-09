@@ -1,4 +1,4 @@
-import React, { useState, useEffect ,useReducer } from 'react';
+import React, { useState, useEffect ,useReducer, useRef } from 'react';
 import { Platform,
 StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -14,37 +14,48 @@ import {rootReducer , initialState} from './ReduxStore/reducers'
 function MyFavouriteShows(props) {
 
    const [shows, setShows] = useState('');
-   const [myFavoriteSh, dispatch] = useReducer(rootReducer, initialState);
+   const [stateShows, dispatch] = useReducer(rootReducer, initialState);
+   const [showsData, setData]  = useState(useSelector(state => state.favoriteShows));
+   const componentIsMounted = useRef(true)
+   if(componentIsMounted){
+       MyFavouriteShows.navigationOptions = () => {(
+           title: ('My Shows')
+       )}
 
+   }
    useEffect(() => {
-        let mounted = true;
-        if(mounted){
-            MyFavouriteShows.navigationOptions = () => {(
-                title: ('My Shows')
-            )}
+           console.log("In first useEffect");
+           return () => {
+               componentIsMounted.current = false
+           }
+   }, [])
+   useEffect(() => {
+        console.log("In second useEffect");
+//        if(stateShows.favoriteShows){
+//            createListComponents();
+//        }
+               if(showsData){
+                   createListComponents();
+               }
+   });
+   useEffect(() => {
+            console.log("In third useEffect");
+            createListComponents();
 
-          if(myFavoriteSh.favoriteShows){
-                //createListComponents()
-            }
-        }
-        return () => mounted = false;
-    }, [myFavoriteSh.favoriteShows])
+   }, [stateShows])
 
-    const handleOpenWeather = () => {
-        setShows(true);
-    }
     const createListComponents = () => {
         //let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
-        const showsData = useSelector(state => state.favoriteShows);
+       // const showsData = useSelector(state => state.favoriteShows);
 
         console.log("createListComponents favourites:");
-        console.log(showsData);
+        //console.log(showsData);
         let button = [];
 
         if (showsData) {
             button = <ScrollView style={styles.scroll}>
                 {
-                    showsData.map((item, index) => (
+                    showsDataX.favoriteShows.map((item, index) => (
                         <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('FavouriteShow', {
                             currentItem: item,
                             ImageUrl: item.imageUrl == null ? '': item.imageUrl,

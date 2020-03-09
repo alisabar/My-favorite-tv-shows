@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 
 
 function mapStateToProps(initialState) {
-    console.log('initial state : ', initialState);
+    console.log('initial state FavouriteShowScreen: ', initialState);
     return {
 
         MyTVShows: initialState
