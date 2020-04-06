@@ -94,10 +94,16 @@ app.post('/api/shows', (req, res) => {
 app.post('/api/getMyFavouriteShows', async (req, res) => {
     console.log('getMyFavouriteShows body', req.body);
     console.log('getMyFavouriteShows user id ', req.body.userId);
-    const favouritesShows = await getUserFavouriteShows(req, res);
-    res.json(JSON.stringify(favouritesShows));
-    console.log("favouritesShows:");
-    console.log(favouritesShows);
+    try{
+        const favouritesShows = await getUserFavouriteShows(req, res);
+        res.json(favouritesShows);
+        console.log("favouritesShows:");
+        console.log(favouritesShows);
+    }
+    catch{
+        res.json({error:'favouriteShows doesn`t exists'});
+    }
+
 });
 
 app.post('/api/addFavouriteShow', async (req, res) => {
@@ -146,7 +152,7 @@ async function getUserFavouriteShows(req, res) {
             if (!favouriteShows) {
 
                 console.log('favouriteShows doesn`t exists');
-                res.send('favouriteShows doesn`t exists');
+
                 reject("favouriteShows doesn`t exists");
                 return;
             }
@@ -165,7 +171,7 @@ async function getUserFavouriteShows(req, res) {
             });
             //console.log("favouriteShows: \n",favouriteShows);
             console.log("myFavourites: \n", myFavourites);
-            resolve(myFavourites);
+            resolve({data:myFavourites});
 
 
         }

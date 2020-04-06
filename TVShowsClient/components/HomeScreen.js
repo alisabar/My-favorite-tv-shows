@@ -49,7 +49,7 @@ export default class HomeScreen extends Component {
   fetchSearchData = () => {
     const searchFor = this.state.searchKeyWords ? this.state.searchKeyWords : '';
     if (searchFor.length > 0) {
-      fetch('http://192.168.1.7:5000/api/shows', {
+      fetch(URL.concat('/api/shows'), {
         method: 'POST',
         headers: {
           Accept: 'application/json',

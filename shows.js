@@ -25,6 +25,7 @@ module.exports = {
         })
     },
     searchShows: function (res, searchParam) {
+        console.log("at search shows. searchParam: "+searchParam)
         var headers = {
             'Content-Type': 'application/json'
         }

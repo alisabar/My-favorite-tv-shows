@@ -2,14 +2,29 @@ import React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableHighlight } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
+import * as actions from './ReduxStore/actions'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux';
+function mapStateToProps(initialState) {
+    console.log('initial state : ', initialState);
+    return {
 
-export default class MyLogin extends React.Component {
+        state: initialState
+    }
+}
+function mapDispatchToProps(dispatch) {
+    return {
+        dispatchActions: bindActionCreators(actions, dispatch)
+    }
+}
+class MyLogin extends React.Component {
 
   static navigationOptions = {
     title: 'Log-In',
   };
 
   constructor(props) {
+
     super(props);
     this.SubmitForm = this.SubmitForm.bind(this);
     this.validateEmail = this.validateEmail.bind(this);
@@ -84,6 +99,7 @@ export default class MyLogin extends React.Component {
 
   }
   SubmitForm = () => {
+    const { dispatchActions } = this.props
     const { navigate } = this.props.navigation;
     console.log('submit form pressed');
     console.log('email: ' + this.state.email);
@@ -109,6 +125,7 @@ export default class MyLogin extends React.Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
+          dispatchActions.setUserID(responseJson.userId);
           console.log('responseJson after login: ', responseJson);
           this.setState({
             msg: responseJson.userId,
@@ -208,7 +225,7 @@ export default class MyLogin extends React.Component {
     );
   }
 }
-
+export default connect(mapStateToProps, mapDispatchToProps)(MyLogin)
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
