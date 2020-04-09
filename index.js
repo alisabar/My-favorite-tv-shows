@@ -261,12 +261,13 @@ async function deleteShow(req, res) {
             const showId = await shows.getShowIdByName(db, showName);
             console.log("showId: ", showId);
             await shows.deleteFavoriteShow(db, showId, userId);
+            closeDb(db);
             res.json({msg:"Deleted"});
         }
         catch (error) {
             console.log('Cought this:', error);
             console.log(error.message);
-            res.sendStatus(500);
+            res.json({msg: error.message});
         }
   });
 }

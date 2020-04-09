@@ -86,7 +86,9 @@ module.exports = {
         return new Promise(function (resolve, reject) {
 
                 console.log("in deleteFavoriteShow");
-                let sql = `DELETE FROM usershow WHERE ShowId = ${showId} AND userId= ${userId}`;
+                console.log(showId[0].id);
+                console.log(userId);
+                let sql = 'DELETE FROM usershow WHERE ShowId ="'+ showId[0].id +'" AND userId= "'+ userId +'";';
                 console.log(sql);
                 let query = db.query(sql, (err, result) => {
                     if (err) {
@@ -95,6 +97,7 @@ module.exports = {
                         throw err;
 
                     }
+
                     resolve('Successfully deleted!');
                 });
         });

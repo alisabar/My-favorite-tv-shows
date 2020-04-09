@@ -32,6 +32,7 @@ class FavouriteShowScreen extends React.Component {
     this.getData = this.getData.bind(this);
 
     this.state = {
+      errorMsg:'',
       showId:'',
       userId: '',
       TVShowImageUrl: '',
@@ -80,7 +81,7 @@ class FavouriteShowScreen extends React.Component {
       const { navigate } = this.props.navigation;
       const { dispatchActions } = this.props;
       const showId = this.state.showId ? this.state.showId : '';
-      dispatchActions.deleteFavorite(showId);
+      //const userId= this.state.userId ? this.state.userId : '';
 
     console.log('submit deleteFavouriteShow pressed');
     if (this.state.userId.length > 0) {
@@ -102,10 +103,17 @@ class FavouriteShowScreen extends React.Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-          console.log('responseJson after deleteFavouriteShow: ', responseJson);
-          this.setState({
-            msg: responseJson.msg
-          },()=>{navigate('FavouritesScreen');});
+            console.log('responseJson after deleteFavouriteShow: ', responseJson);
+            if(responseJson.msg=='Deleted'){
+                dispatchActions.fetchShows(this.state.userId);
+                navigate('FavouritesScreen');
+            }
+            else{
+                console.log("Error while delete "+responseJson.msg);
+                  this.setState({
+                    errorMsg: responseJson.msg
+                  })
+            }
         })
         .catch((error) => {
           console.error(error);
