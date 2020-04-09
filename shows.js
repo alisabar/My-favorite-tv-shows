@@ -106,7 +106,7 @@ module.exports = {
             console.log(newShow);
 
                 let sql1 ='INSERT INTO shows (id, name, language, premiered, rating, imageUrl)'+
-                'SELECT "' + newShow.id + '" ,"' + newShow.name + '" ,"' + newShow.language + '" ,"' + newShow.premiered + '" ,"' + newShow.rating + '" ,"' + newShow.imageUrl + '" '+
+                'SELECT "' + newShow.id + '" ,"' + newShow.name + '" ,"' + newShow.language + '" ,"' + newShow.premiered + '" ,' + newShow.rating + ' ,"' + newShow.imageUrl + '" '+
                 'WHERE NOT EXISTS (SELECT * FROM shows WHERE id = "' + newShow.id + '");'
                 console.log(sql1);
                 let query1 = db.query(sql1, (err, result) => {

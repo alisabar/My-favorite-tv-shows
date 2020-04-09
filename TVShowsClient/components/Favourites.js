@@ -10,7 +10,8 @@ import { bindActionCreators } from 'redux'
 import { useDispatch, useSelector } from "react-redux"
 import {rootReducer , initialState} from './ReduxStore/reducers'
 
-function MyFavouriteShows(props) {
+
+const MyFavouriteShows = ({navigation}) => {
 
    const [shows, setShows] = useState('');
    //const [stateShows, dispatch] = useReducer(rootReducer, initialState);
@@ -18,18 +19,9 @@ function MyFavouriteShows(props) {
    const userId = useSelector(state => state.userId);
    const dispatch = useDispatch();
 
-   //const componentIsMounted = useRef(true)
-
-   //if(componentIsMounted){
-
-//       MyFavouriteShows.navigationOptions = () => {(
-//           title: ('My Shows')
-//       )}
-
-  // }
    useEffect(() => {
 
-           console.log("In first useEffect");
+          console.log("In first useEffect");
 
           if(userId){
                dispatch(actions.fetchShows(userId));
@@ -49,6 +41,7 @@ function MyFavouriteShows(props) {
   }, [showsData])
 
     const createListComponents = () => {
+
         //let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
        // const showsData = useSelector(state => state.favoriteShows);
 
@@ -60,9 +53,9 @@ function MyFavouriteShows(props) {
             button = <ScrollView style={styles.scroll}>
                 {
                     showsData.map((item, index) => (
-                        <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('FavouriteShow', {
+                        <TouchableHighlight keys={index} onPress={() =>navigation.navigate('FavouriteShow', {
                             currentItem: item,
-                            ImageUrl: item.imageUrl == null ? '': item.imageUrl,
+                            ImageUrl: item.imageUrl == null ? '' : item.imageUrl,
                         })}
                             underlayColor='#ddd'>
 
@@ -92,6 +85,9 @@ function MyFavouriteShows(props) {
 
 }
 
+//MyFavouriteShows.navigationOptions = ()=>{(
+//    title:"My Favorites"
+//)}
 
 const styles = StyleSheet.create({
 
@@ -117,4 +113,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default MyFavouriteShows;
+export default MyFavouriteShows

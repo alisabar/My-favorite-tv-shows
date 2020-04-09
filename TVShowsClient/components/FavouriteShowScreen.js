@@ -31,19 +31,19 @@ class FavouriteShowScreen extends React.Component {
     this.deleteShow = this.deleteShow.bind(this);
     this.getData = this.getData.bind(this);
 
-//    this.state = {
-//      showId:'',
-//      userId: '',
-//      TVShowImageUrl: '',
-//      TVShowComponent: '',
-//      defaultImage: '',
-//      name: '',
-//      language: '',
-//      premiered: '',
-//      rating: '',
-//      genres: '',
-//      imageUrl:''
-//    }
+    this.state = {
+      showId:'',
+      userId: '',
+      TVShowImageUrl: '',
+      TVShowComponent: '',
+      defaultImage: '',
+      name: '',
+      language: '',
+      premiered: '',
+      rating: '',
+      genres: '',
+      imageUrl:''
+    }
 
   }
   componentDidMount() {

@@ -3,6 +3,7 @@ import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, 
 import SearchComponent from './Search.js';
 import TVShowComponent from './TVshow.js';
 import {URL} from'./Config.js';
+
 export default class HomeScreen extends Component {
 
   static navigationOptions = {
