@@ -9,14 +9,15 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { useDispatch, useSelector } from "react-redux"
 import {rootReducer , initialState} from './ReduxStore/reducers'
-
+import MessageModal from './MessageModal'
 
 const MyFavouriteShows = ({navigation}) => {
 
    const [shows, setShows] = useState('');
-   //const [stateShows, dispatch] = useReducer(rootReducer, initialState);
+   const [actionMessage, setActionMessage] = useState('');
    const showsData = useSelector(state=> state.favoriteShows);
    const userId = useSelector(state => state.userId);
+   const [modalVisible, setModalVisible] = useState(false);
    const dispatch = useDispatch();
 
    useEffect(() => {
@@ -42,8 +43,6 @@ const MyFavouriteShows = ({navigation}) => {
 
     const createListComponents = () => {
 
-        //let showsData = this.state.favouriteShows ? this.state.favouriteShows : false;
-       // const showsData = useSelector(state => state.favoriteShows);
 
         console.log("createListComponents favourites:");
         console.log(showsData);
@@ -53,7 +52,7 @@ const MyFavouriteShows = ({navigation}) => {
             button = <ScrollView style={styles.scroll}>
                 {
                     showsData.map((item, index) => (
-                        <TouchableHighlight keys={index} onPress={() =>navigation.navigate('FavouriteShow', {
+                        <TouchableHighlight key={index} onPress={() =>navigation.navigate('FavouriteShow', {
                             currentItem: item,
                             ImageUrl: item.imageUrl == null ? '' : item.imageUrl,
                         })}
@@ -80,14 +79,12 @@ const MyFavouriteShows = ({navigation}) => {
                             shows : <ActivityIndicator size="large" color="#0000ff" />}
 
             </View>
+            <MessageModal message={actionMessage} visible={modalVisible}/>
         </View>
         );
 
 }
 
-//MyFavouriteShows.navigationOptions = ()=>{(
-//    title:"My Favorites"
-//)}
 
 const styles = StyleSheet.create({
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
+import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
 import * as actions from './ReduxStore/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
+import ConfirmModal from './ConfirmationModal'
 
 
 function mapStateToProps(initialState) {
@@ -28,10 +29,15 @@ class FavouriteShowScreen extends React.Component {
   constructor(props) {
 
     super(props);
+
+    this.startChecking = this.startChecking.bind(this);
+    this.handleChildClick = this.handleChildClick.bind(this);
     this.deleteShow = this.deleteShow.bind(this);
     this.getData = this.getData.bind(this);
-
+    this.setModalVisible=this.setModalVisible.bind(this)
     this.state = {
+      modalVisible:false,
+      checkIfToDelete:false,
       errorMsg:'',
       showId:'',
       userId: '',
@@ -43,7 +49,8 @@ class FavouriteShowScreen extends React.Component {
       premiered: '',
       rating: '',
       genres: '',
-      imageUrl:''
+      imageUrl:'',
+      flag:"delete"
     }
 
   }
@@ -64,26 +71,55 @@ class FavouriteShowScreen extends React.Component {
     }, () => this.getData())
 
   }
-  getData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('userId')
-      if (value !== null) {
-        this.setState({
-          userId: value
-        })
-      }
-    } catch (e) {
-      console.log(e);
+
+  setModalVisible=()=>{
+    this.setState({modalVisible: true, flag:"delete"})
+  }
+
+  getData =() => {
+    console.log("in get data. userId: ",this.props.MyTVShows.userId);
+    if(this.props.MyTVShows.userId!=null){
+
+            this.setState({
+              userId: this.props.MyTVShows.userId
+            })
     }
   }
+
+   startChecking=()=>{
+    this.setState({checkIfToDelete:true})
+   }
+
+//    try {
+//      const value = await AsyncStorage.getItem('userId')
+//      if (value !== null) {
+//        this.setState({
+//          userId: value
+//        })
+//      }
+//    } catch (e) {
+//      console.log(e);
+//    }
+
+
+  handleChildClick=(toDelete)=>{
+
+        console.log("In handleChildClick: ",toDelete)
+        if(toDelete){
+            this.deleteShow();
+        }
+  }
+
+
   deleteShow = () => {
 
       const { navigate } = this.props.navigation;
       const { dispatchActions } = this.props;
       const showId = this.state.showId ? this.state.showId : '';
-      //const userId= this.state.userId ? this.state.userId : '';
+
 
     console.log('submit deleteFavouriteShow pressed');
+
     if (this.state.userId.length > 0) {
       fetch(URL.concat('/api/deleteFavouriteShow'), {
         method: 'POST',
@@ -105,8 +141,16 @@ class FavouriteShowScreen extends React.Component {
         .then((responseJson) => {
             console.log('responseJson after deleteFavouriteShow: ', responseJson);
             if(responseJson.msg=='Deleted'){
-                dispatchActions.fetchShows(this.state.userId);
-                navigate('FavouritesScreen');
+
+                    dispatchActions.fetchShows(this.state.userId);
+                    ToastAndroid.showWithGravity(`The show ${this.state.name} was deleted`, ToastAndroid.SHORT, ToastAndroid.CENTER);
+
+                    setTimeout(function(){
+
+                        navigate('FavouritesScreen');
+                    },1000 );
+
+
             }
             else{
                 console.log("Error while delete "+responseJson.msg);
@@ -124,53 +168,54 @@ class FavouriteShowScreen extends React.Component {
 
   render() {
 
+     return (
+                    <View style={{ flex: 1, justifyContent: "space-around", padding:10}}>
 
-    return (
-    <View style={{ flex: 1, justifyContent: "space-around", padding:10}}>
+                            <View style={styles.image}>
+                                {this.state.defaultImage ? this.state.defaultImage : false}
+                            </View>
 
-            <View style={styles.image}>
-                {this.state.defaultImage ? this.state.defaultImage : false}
-            </View>
+                        <View style={styles.row}>
+                            <View style={styles.heading}>
+                                <Text style={styles.headline}>name: </Text>
+                            </View>
+                            <View style={styles.info}>
+                                {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name}</Text>}
+                            </View>
+                        </View>
+                        <View style={styles.row}>
+                            <View style={styles.heading}>
+                                <Text style={styles.headline}>language: </Text>
+                            </View>
+                            <View style={styles.info}>
+                                {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language}</Text>}
+                            </View>
+                        </View>
+                        <View style={styles.row}>
+                            <View style={styles.heading}>
+                                <Text style={styles.headline}>premiered: </Text>
+                            </View>
+                            <View style={styles.info}>
+                                {this.state.premiered == 'null' ? false : <Text style={styles.text}>{this.state.premiered}</Text>}
+                            </View>
+                        </View>
+                        <View style={styles.row}>
+                            <View style={styles.heading}>
+                                <Text style={styles.headline}>rating: </Text>
+                            </View>
+                            <View style={styles.info}>
+                                {this.state.rating == 'null' ? false : <Text style={styles.text}>{this.state.rating}</Text>}
+                            </View>
+                        </View>
 
-        <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>name: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name}</Text>}
-            </View>
-        </View>
-        <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>language: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language}</Text>}
-            </View>
-        </View>
-        <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>premiered: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.premiered == 'null' ? false : <Text style={styles.text}>{this.state.premiered}</Text>}
-            </View>
-        </View>
-        <View style={styles.row}>
-            <View style={styles.heading}>
-                <Text style={styles.headline}>rating: </Text>
-            </View>
-            <View style={styles.info}>
-                {this.state.rating == 'null' ? false : <Text style={styles.text}>{this.state.rating}</Text>}
-            </View>
-        </View>
-        <TouchableHighlight onPress={this.deleteShow} style={styles.touchable}>
-          <Text style={styles.button}>
-            Delete
-          </Text>
-        </TouchableHighlight>
-      </View>
-    );
+                        <View>
+                        </View>
+                        <ConfirmModal onClick={this.handleChildClick} message={this.state.name} visible={this.state.modalVisible}/>
+                      </View>
+
+                    );
+
+
   }
 }
 
@@ -197,11 +242,12 @@ const styles = StyleSheet.create({
     flex:1,
   },
   button: {
+
     fontSize: 15,
     color: 'white',
   },
   touchable: {
-    padding: 10,
+
     height: 30,
     width: 50,
     backgroundColor: '#000080',

@@ -154,7 +154,7 @@ class TVShowScreen extends React.Component {
         </View>
         <TouchableHighlight onPress={this.submitFavourite} style={styles.touchable}>
           <Text style={styles.button}>
-            LIKE
+            &#128153;
           </Text>
         </TouchableHighlight>
       </View>
@@ -187,19 +187,20 @@ const styles = StyleSheet.create({
   },
   button: {
 
-    fontSize: 15,
+    textAlign:"center",
+    fontWeight: "bold",
+    fontSize: 20,
     color: 'white',
-    width: 100
+
   },
   touchable: {
+    marginBottom:20,
 
-
-    padding: 10,
-    height: 30,
-    width: 50,
     backgroundColor: '#000080',
-    borderRadius: 30,
+    padding: 10,
     alignSelf: 'center',
+
+    borderRadius: 25,
 
   },
   row: {

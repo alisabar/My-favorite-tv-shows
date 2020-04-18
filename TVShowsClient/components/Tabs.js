@@ -22,11 +22,11 @@ const AppNavigator = createStackNavigator(
 
 const MyShowsContainer = createStackNavigator(
     {
-        FavouritesScreen: FavouriteScreen,
+        Favorites: FavouriteScreen,
         FavouriteShow: FavouriteShowScreen,
     },
     {
-        initialRouteName: "FavouritesScreen"
+        initialRouteName: "Favorites"
     }
 
 );

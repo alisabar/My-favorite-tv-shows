@@ -75,16 +75,14 @@ export default class HomeScreen extends Component {
   }
 
   createComponents = () => {
-    console.log('tvShowsData', this.state.tvShowsData);
+    console.log('tvShowsData', JSON.stringify(this.state.tvShowsData));
     let showsData = this.state.tvShowsData ? this.state.tvShowsData : false;
     let button = [];
-
     if (showsData) {
       button = <ScrollView style={styles.scroll}>
         {
           showsData.map((item, index) => (
             <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image == null ? '' : item.show.image.medium   })} underlayColor='#ddd'>
-
               <TVShowComponent language={item.show.language} genres={item.show.genres} name={item.show.name} />
             </TouchableHighlight>
           ))
@@ -95,6 +93,7 @@ export default class HomeScreen extends Component {
       button = <Text style={styles.text}>hi</Text>;
     }
     this.setState({ shows: button });
+
   }
   searchFor = () => {
     const init = this.state.searchUrl.length > 0 ? this.state.searchUrl : '';
