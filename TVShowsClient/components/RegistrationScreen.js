@@ -1,12 +1,12 @@
 import React from 'react';
-import {URL} from'./Config.js';
+import { URL } from './Config.js';
 import { Text, View, StyleSheet, TextInput, TouchableHighlight, Modal, ToastAndroid } from 'react-native';
 
 export default class MyRegistration extends React.Component {
 
-    static navigationOptions = {
-      title: 'Sign-Up',
-    };
+  static navigationOptions = {
+    title: 'Sign-Up',
+  };
 
   constructor(props) {
     super(props);
@@ -17,7 +17,7 @@ export default class MyRegistration extends React.Component {
       email: '',
       password: '',
       msg: '',
-      ip_addr:'',
+      ip_addr: '',
       is_pass_filled: false,
       is_email_filled: false,
       is_email_filled: false,
@@ -32,7 +32,7 @@ export default class MyRegistration extends React.Component {
   }
   componentDidMount = () => {
     this.setState({ modalVisible: false, msg: '' });
-console.log("In register component did mount. modalVisible: "+ this.state.modalVisible);
+    console.log("In register component did mount. modalVisible: " + this.state.modalVisible);
   }
   validateEmail = (email) => {
 
@@ -111,7 +111,7 @@ console.log("In register component did mount. modalVisible: "+ this.state.modalV
 
   render() {
 
-  console.log("in register");
+    console.log("in register");
     if (this.state.modalVisible == false) {
       return (
         <View style={styles.container}>

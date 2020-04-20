@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {URL} from'./Config.js';
+import { URL } from './Config.js';
 import * as actions from './ReduxStore/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
@@ -10,16 +10,16 @@ import Moment from 'react-moment';
 import moment from 'moment';
 
 function mapStateToProps(initialState) {
-    console.log('initial state FavouriteShowScreen: ', initialState);
-    return {
+  console.log('initial state FavouriteShowScreen: ', initialState);
+  return {
 
-        MyTVShows: initialState
-    }
+    MyTVShows: initialState
+  }
 }
 function mapDispatchToProps(dispatch) {
-    return {
-        dispatchActions: bindActionCreators(actions, dispatch)
-    }
+  return {
+    dispatchActions: bindActionCreators(actions, dispatch)
+  }
 }
 class FavouriteShowScreen extends React.Component {
 
@@ -35,12 +35,12 @@ class FavouriteShowScreen extends React.Component {
     this.handleChildClick = this.handleChildClick.bind(this);
     this.deleteShow = this.deleteShow.bind(this);
     this.getData = this.getData.bind(this);
-    this.setModalVisible=this.setModalVisible.bind(this)
+    this.setModalVisible = this.setModalVisible.bind(this)
     this.state = {
-      modalVisible:false,
-      checkIfToDelete:false,
-      errorMsg:'',
-      showId:'',
+      modalVisible: false,
+      checkIfToDelete: false,
+      errorMsg: '',
+      showId: '',
       userId: '',
       TVShowImageUrl: '',
       TVShowComponent: '',
@@ -50,8 +50,8 @@ class FavouriteShowScreen extends React.Component {
       premiered: '',
       rating: '',
       genres: '',
-      imageUrl:'',
-      flag:"delete"
+      imageUrl: '',
+      flag: "delete"
     }
 
   }
@@ -62,50 +62,50 @@ class FavouriteShowScreen extends React.Component {
 
     this.setState({
       defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 150, height: 200, }} />,
-      showId: item ? JSON.stringify(item.id)  : '',
-      name: item ? JSON.stringify(item.name)  : '',
-      language: item ? JSON.stringify(item.language) :  '',
-      premiered: item ? JSON.stringify(item.premiered) :  '',
+      showId: item ? JSON.stringify(item.id) : '',
+      name: item ? JSON.stringify(item.name) : '',
+      language: item ? JSON.stringify(item.language) : '',
+      premiered: item ? JSON.stringify(item.premiered) : '',
       rating: item ? JSON.stringify(item.rating) : '',
       genres: item ? JSON.stringify(item.genres) : '',
-      imageUrl: imgUrl==null ?'': JSON.stringify(imgUrl),
+      imageUrl: imgUrl == null ? '' : JSON.stringify(imgUrl),
     }, () => this.getData())
 
   }
 
-  setModalVisible=()=>{
-    this.setState({modalVisible: true, flag:"delete"})
+  setModalVisible = () => {
+    this.setState({ modalVisible: true, flag: "delete" })
   }
 
-  getData =() => {
-    console.log("in get data. userId: ",this.props.MyTVShows.userId);
-    if(this.props.MyTVShows.userId!=null){
+  getData = () => {
+    console.log("in get data. userId: ", this.props.MyTVShows.userId);
+    if (this.props.MyTVShows.userId != null) {
 
-            this.setState({
-              userId: this.props.MyTVShows.userId
-            })
+      this.setState({
+        userId: this.props.MyTVShows.userId
+      })
     }
   }
 
-   startChecking=()=>{
-    this.setState({checkIfToDelete:true})
-   }
+  startChecking = () => {
+    this.setState({ checkIfToDelete: true })
+  }
 
 
-  handleChildClick=(toDelete)=>{
+  handleChildClick = (toDelete) => {
 
-        console.log("In handleChildClick: ",toDelete)
-        if(toDelete){
-            this.deleteShow();
-        }
+    console.log("In handleChildClick: ", toDelete)
+    if (toDelete) {
+      this.deleteShow();
+    }
   }
 
 
   deleteShow = () => {
 
-      const { navigate } = this.props.navigation;
-      const { dispatchActions } = this.props;
-      const showId = this.state.showId ? this.state.showId : '';
+    const { navigate } = this.props.navigation;
+    const { dispatchActions } = this.props;
+    const showId = this.state.showId ? this.state.showId : '';
 
 
     console.log('submit deleteFavouriteShow pressed');
@@ -129,25 +129,25 @@ class FavouriteShowScreen extends React.Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-            console.log('responseJson after deleteFavouriteShow: ', responseJson);
-            if(responseJson.msg=='Deleted'){
+          console.log('responseJson after deleteFavouriteShow: ', responseJson);
+          if (responseJson.msg == 'Deleted') {
 
-                    dispatchActions.fetchShows(this.state.userId);
-                    ToastAndroid.showWithGravity(`The show ${this.state.name} was deleted`, ToastAndroid.SHORT, ToastAndroid.CENTER);
+            dispatchActions.fetchShows(this.state.userId);
+            ToastAndroid.showWithGravity(`The show ${this.state.name} was deleted`, ToastAndroid.SHORT, ToastAndroid.CENTER);
 
-                  //  setTimeout(function(){
+            //  setTimeout(function(){
 
-                        navigate('Favorites');
-                //    },1000 );
+            navigate('Favorites');
+            //    },1000 );
 
 
-            }
-            else{
-                console.log("Error while delete "+responseJson.msg);
-                  this.setState({
-                    errorMsg: responseJson.msg
-                  })
-            }
+          }
+          else {
+            console.log("Error while delete " + responseJson.msg);
+            this.setState({
+              errorMsg: responseJson.msg
+            })
+          }
         })
         .catch((error) => {
           console.error(error);
@@ -158,61 +158,61 @@ class FavouriteShowScreen extends React.Component {
 
   render() {
 
-     return (
-                    <View style={{ flex: 1, justifyContent: "space-around", padding:10}}>
-                         <View style={styles.image}>
-                              {this.state.defaultImage ? this.state.defaultImage : false}
-                         </View>
+    return (
+      <View style={{ flex: 1, justifyContent: "space-around", padding: 10 }}>
+        <View style={styles.image}>
+          {this.state.defaultImage ? this.state.defaultImage : false}
+        </View>
 
-                        <View style={styles.row}>
-                            <View style={styles.heading}>
-                                <Text style={styles.headline}>name: </Text>
-                            </View>
-                            <View style={styles.info}>
-                                {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name.split('"').join('')}</Text>}
-                            </View>
-                        </View>
-                        <View style={styles.row}>
-                            <View style={styles.heading}>
-                                <Text style={styles.headline}>language: </Text>
-                            </View>
-                            <View style={styles.info}>
-                                {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language.split('"').join('')}</Text>}
-                            </View>
-                        </View>
-                        <View style={styles.row}>
-                          <View style={styles.heading}>
-                            <Text style={styles.headline}>Genres: </Text>
-                          </View>
-                          <View style={styles.info}>
-                            {this.state.genres == 'null' ? false : <Text style={styles.text}>{this.state.genres.substr(2,this.state.genres.length -4).split('","').join(', ')}</Text>}
-                          </View>
-                        </View>
-                        <View style={styles.row}>
-                            <View style={styles.heading}>
-                                <Text style={styles.headline}>premiered: </Text>
-                            </View>
-                            <View style={styles.info}>
+        <View style={styles.row}>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>name: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name.split('"').join('')}</Text>}
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>language: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language.split('"').join('')}</Text>}
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>Genres: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.genres == 'null' ? false : <Text style={styles.text}>{this.state.genres.substr(2, this.state.genres.length - 4).split('","').join(', ')}</Text>}
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>premiered: </Text>
+          </View>
+          <View style={styles.info}>
 
-                                    {this.state.premiered == 'null' ? false :  <Text style={styles.text}> {this.state.premiered.substr(1,this.state.genres.length).split('T')[0] }</Text>}
+            {this.state.premiered == 'null' ? false : <Text style={styles.text}> {this.state.premiered.substr(1, this.state.genres.length).split('T')[0]}</Text>}
 
-                            </View>
-                        </View>
-                        <View style={styles.row}>
-                            <View style={styles.heading}>
-                                <Text style={styles.headline}>rating: </Text>
-                            </View>
-                            <View style={styles.info}>
-                                {this.state.rating == 'null' ? false : <Text style={styles.text}>{this.state.rating}</Text>}
-                            </View>
-                        </View>
+          </View>
+        </View>
+        <View style={styles.row}>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>rating: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.rating == 'null' ? false : <Text style={styles.text}>{this.state.rating}</Text>}
+          </View>
+        </View>
 
-                        <View>
-                        </View>
-                        <ConfirmModal onClick={this.handleChildClick} message={this.state.name} visible={this.state.modalVisible}/>
-                      </View>
+        <View>
+        </View>
+        <ConfirmModal onClick={this.handleChildClick} message={this.state.name} visible={this.state.modalVisible} />
+      </View>
 
-                    );
+    );
 
 
   }
@@ -225,20 +225,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
-  headline:{
+  headline: {
     color: 'black',
     fontSize: 20,
     fontWeight: 'bold',
   },
   text: {
-        color: 'black',
-        fontSize: 20,
+    color: 'black',
+    fontSize: 20,
   },
   scroll: {
     flex: 1,
   },
   heading: {
-    flex:1,
+    flex: 1,
   },
   button: {
 
@@ -251,20 +251,20 @@ const styles = StyleSheet.create({
     width: 50,
     backgroundColor: '#000080',
     borderRadius: 30,
-    alignSelf:'center',
+    alignSelf: 'center',
   },
-  row:{
-    flex:1,
+  row: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
   },
-  image:{
+  image: {
 
-     flex:4,
-     flexDirection: 'row',
-     justifyContent: 'center',
+    flex: 4,
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  info:{
+  info: {
     flex: 1,
   },
 

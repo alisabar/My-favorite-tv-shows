@@ -94,14 +94,14 @@ app.post('/api/shows', (req, res) => {
 app.post('/api/getMyFavouriteShows', async (req, res) => {
     console.log('getMyFavouriteShows body', req.body);
     console.log('getMyFavouriteShows user id ', req.body.userId);
-    try{
+    try {
         const favouritesShows = await getUserFavouriteShows(req, res);
         res.json(favouritesShows);
         console.log("favouritesShows:");
         console.log(favouritesShows);
     }
     catch{
-        res.json({error:'favouriteShows doesn`t exists'});
+        res.json({ error: 'favouriteShows doesn`t exists' });
     }
 
 });
@@ -171,7 +171,7 @@ async function getUserFavouriteShows(req, res) {
             });
             //console.log("favouriteShows: \n",favouriteShows);
             console.log("myFavourites: \n", myFavourites);
-            resolve({data:myFavourites});
+            resolve({ data: myFavourites });
 
 
         }
@@ -238,7 +238,7 @@ async function getShowById(db, id) {
 
 
 async function deleteShow(req, res) {
-  return new Promise(async (resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         try {
             console.log("In deleteShow");
             const db = connectDb();
@@ -248,14 +248,14 @@ async function deleteShow(req, res) {
             console.log("showId: ", showId);
             await shows.deleteFavoriteShow(db, showId, userId);
             closeDb(db);
-            res.json({msg:"Deleted"});
+            res.json({ msg: "Deleted" });
         }
         catch (error) {
             console.log('Cought this:', error);
             console.log(error.message);
-            res.json({msg: error.message});
+            res.json({ msg: error.message });
         }
-  });
+    });
 }
 
 async function insertShow(req, res) {
@@ -277,7 +277,7 @@ async function insertShow(req, res) {
             const isDate = await checkDate(receivedShow.premiered)
             console.log("isDate");
             console.log(isDate)
-            if(!isDate){
+            if (!isDate) {
                 receivedShow.premiered = null;
             }
 
@@ -285,16 +285,16 @@ async function insertShow(req, res) {
 
                 name: myShow.name.slice(1, myShow.name.length - 1),
                 language: myShow.language.slice(1, myShow.language.length - 1),
-                premiered: receivedShow.premiered!='null' ? receivedShow.premiered.slice(1, receivedShow.premiered.length - 1) : '0000-00-00 00:00:00',
+                premiered: receivedShow.premiered != 'null' ? receivedShow.premiered.slice(1, receivedShow.premiered.length - 1) : '0000-00-00 00:00:00',
                 rating: !myShow.rating ? 0 : myShow.rating,
                 imageUrl: myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
 
             };
 
             newShow.id = require("crypto")
-                        .createHash("sha256")
-                        .update(newShow.name.concat(newShow.premiered).concat(newShow.rating))
-                        .digest("hex");
+                .createHash("sha256")
+                .update(newShow.name.concat(newShow.premiered).concat(newShow.rating))
+                .digest("hex");
 
             await shows.insertNewShow(db, newShow);
             await shows.insertNewUserShow(db, newShow, userId);
@@ -302,7 +302,7 @@ async function insertShow(req, res) {
             closeDb(db);
             newShow.genres = myShow.genres ? JSON.parse(myShow.genres) : ''
 
-            res.json({show: newShow});
+            res.json({ show: newShow });
 
             resolve('success');
         }
@@ -317,26 +317,26 @@ async function insertShow(req, res) {
     });
 
 }
-async function checkDate(resDate){
-    try{
+async function checkDate(resDate) {
+    try {
         const validation = await validateDate(resDate);
-        if(validation){
+        if (validation) {
             return true
         }
     }
-    catch(err){
+    catch (err) {
         console.log(err);
         return false;
     }
 }
 
 
-async function validateDate(resDate){
+async function validateDate(resDate) {
     return new Promise((resolve, reject) => {
         console.log("checking the date");
         const d = new Date(resDate);
         console.log(d.getDate());
-        if(d.getDate()=='NaN'){
+        if (d.getDate() == 'NaN') {
             reject("Not a Date");
         }
         else resolve(true);
@@ -358,7 +358,7 @@ async function loginUser(req, res) {
     catch (error) {
         console.log('Catched this:');
         console.log(error);
-        res.json({err: error});
+        res.json({ err: error });
 
     }
 }
@@ -379,10 +379,10 @@ async function getUser(postedUser) {
             }
             console.log(result);
             closeDb(db);
-            if(result.length > 0){
+            if (result.length > 0) {
                 resolve(result);
             }
-            else{
+            else {
                 reject("User doesn`t exist");
             }
 

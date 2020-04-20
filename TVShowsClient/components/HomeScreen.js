@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
 import SearchComponent from './Search.js';
 import TVShowComponent from './TVshow.js';
-import {URL} from'./Config.js';
+import { URL } from './Config.js';
 
 export default class HomeScreen extends Component {
 
@@ -82,7 +82,7 @@ export default class HomeScreen extends Component {
       button = <ScrollView style={styles.scroll}>
         {
           showsData.map((item, index) => (
-            <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image == null ? '' : item.show.image.medium   })} underlayColor='#ddd'>
+            <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image == null ? '' : item.show.image.medium })} underlayColor='#ddd'>
               <TVShowComponent language={item.show.language} genres={item.show.genres} name={item.show.name} />
             </TouchableHighlight>
           ))

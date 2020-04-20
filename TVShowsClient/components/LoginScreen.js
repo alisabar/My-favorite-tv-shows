@@ -1,21 +1,21 @@
 import React from 'react';
 import { Text, View, StyleSheet, TextInput, TouchableHighlight, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import {URL} from'./Config.js';
+import { URL } from './Config.js';
 import * as actions from './ReduxStore/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 function mapStateToProps(initialState) {
-    console.log('initial state : ', initialState);
-    return {
+  console.log('initial state : ', initialState);
+  return {
 
-        state: initialState
-    }
+    state: initialState
+  }
 }
 function mapDispatchToProps(dispatch) {
-    return {
-        dispatchActions: bindActionCreators(actions, dispatch)
-    }
+  return {
+    dispatchActions: bindActionCreators(actions, dispatch)
+  }
 }
 class MyLogin extends React.Component {
 
@@ -75,10 +75,10 @@ class MyLogin extends React.Component {
       this.setState({ password: pass, is_pass_valid: false, valid_pass_msg: 'Password should contain numbers and letters.' });
     }
   }
-    componentDidMount = () => {
-      console.log("component did mount login");
+  componentDidMount = () => {
+    console.log("component did mount login");
 
-    }
+  }
   componentDidUpdate = (prevProps, prevState) => {
     console.log("componentDidUpdate at login");
     const { navigation } = this.props;
@@ -109,7 +109,7 @@ class MyLogin extends React.Component {
 
     if ((this.state.is_email_valid && this.state.is_pass_valid)) {
 
-      console.log('calling login Url: '+URL);
+      console.log('calling login Url: ' + URL);
       console.log(URL.concat('/api/login'));
 
       fetch(URL.concat('/api/login'), {
@@ -125,17 +125,17 @@ class MyLogin extends React.Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-            if(responseJson.userId){
-              dispatchActions.setUserID(responseJson.userId);
-              console.log('responseJson after login: ', responseJson);
-              navigate('MyFavourites');
-            }
+          if (responseJson.userId) {
+            dispatchActions.setUserID(responseJson.userId);
+            console.log('responseJson after login: ', responseJson);
+            navigate('MyFavourites');
+          }
 
-            else if(responseJson.err ){
-               console.log(responseJson.err);
-              ToastAndroid.showWithGravity(responseJson.err, ToastAndroid.SHORT, ToastAndroid.CENTER);
+          else if (responseJson.err) {
+            console.log(responseJson.err);
+            ToastAndroid.showWithGravity(responseJson.err, ToastAndroid.SHORT, ToastAndroid.CENTER);
 
-            }
+          }
 
         })
         .catch((error) => {
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     width: 100,
   },
   buttonText: {
-    padding:5,
+    padding: 5,
     fontSize: 20,
     backgroundColor: '#000080',
     borderRadius: 30,

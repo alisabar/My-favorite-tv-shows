@@ -1,4 +1,4 @@
-import React, { Component, useState ,useEffect } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   Alert,
   Modal,
@@ -12,79 +12,79 @@ const ConfirmModal = (props) => {
   const [modalVisible, setModalVisible] = useState(props.visible);
   const [messageModalVisible, setMessageModalVisible] = useState(props.msgvisible);
   const [flag, setFlag] = useState(props.flag)
-  const [message,setMessage] = useState(props.message);
+  const [message, setMessage] = useState(props.message);
 
 
 
-  const positiveAnswer=()=>{
+  const positiveAnswer = () => {
 
     setModalVisible(!modalVisible);
     props.onClick(true); // pass any argument to the callback
   }
-  const negativeAnswer=()=>{
+  const negativeAnswer = () => {
 
     setModalVisible(!modalVisible);
     props.onClick(false); // pass any argument to the callback
   }
 
 
-    return(
+  return (
+    <View style={styles.centeredView}>
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+      >
         <View style={styles.centeredView}>
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={modalVisible}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Would you like to delete {message}?</Text>
-                <View style={styles.modalButtons}>
-                    <TouchableHighlight
-                      style={styles.modalButton}
-                      onPress={positiveAnswer}
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Would you like to delete {message}?</Text>
+            <View style={styles.modalButtons}>
+              <TouchableHighlight
+                style={styles.modalButton}
+                onPress={positiveAnswer}
 
-                    >
-                      <Text style={styles.textStyle}>yes</Text>
-                    </TouchableHighlight>
-                    <TouchableHighlight
-                      style={styles.modalButton}
-                      onPress={negativeAnswer}
-                    >
-                      <Text style={styles.textStyle}>No</Text>
-                    </TouchableHighlight>
-                </View>
-              </View>
+              >
+                <Text style={styles.textStyle}>yes</Text>
+              </TouchableHighlight>
+              <TouchableHighlight
+                style={styles.modalButton}
+                onPress={negativeAnswer}
+              >
+                <Text style={styles.textStyle}>No</Text>
+              </TouchableHighlight>
             </View>
-          </Modal>
+          </View>
+        </View>
+      </Modal>
 
-          <TouchableHighlight
-            style={styles.openButton}
-            onPress={() => {
-              setModalVisible(true);
-            }}
-          >
-            <Text style={styles.textStyle}>&#x1f5d1;</Text>
-          </TouchableHighlight>
-         </View>
-        )
+      <TouchableHighlight
+        style={styles.openButton}
+        onPress={() => {
+          setModalVisible(true);
+        }}
+      >
+        <Text style={styles.textStyle}>&#x1f5d1;</Text>
+      </TouchableHighlight>
+    </View>
+  )
 
 
-//   else{
-//      return(
-//       <View style={styles.centeredView}>
-//             <Modal
-//               animationType="fade"
-//               transparent={true}
-//               visible={modalVisible}
-//             >
-//               <View style={styles.centeredView}>
-//                 <View style={styles.modalView}>
-//                   <Text style={styles.modalText}>{message}</Text>
-//                 </View>
-//               </View>
-//             </Modal>
-//        </View>)
-//   }
+  //   else{
+  //      return(
+  //       <View style={styles.centeredView}>
+  //             <Modal
+  //               animationType="fade"
+  //               transparent={true}
+  //               visible={modalVisible}
+  //             >
+  //               <View style={styles.centeredView}>
+  //                 <View style={styles.modalView}>
+  //                   <Text style={styles.modalText}>{message}</Text>
+  //                 </View>
+  //               </View>
+  //             </Modal>
+  //        </View>)
+  //   }
 
 };
 
@@ -110,13 +110,13 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
-  modalButtons:{
+  modalButtons: {
     alignItems: "stretch",
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  modalButton:{
-    marginLeft:4,
+  modalButton: {
+    marginLeft: 4,
     backgroundColor: "#2196F3",
     borderRadius: 25,
     padding: 10,
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#000080',
     borderRadius: 25,
     padding: 10,
-    marginBottom:20,
+    marginBottom: 20,
   },
   textStyle: {
     fontSize: 20,

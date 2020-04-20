@@ -40,7 +40,7 @@ module.exports = {
         })
     },
     searchShows: function (res, searchParam) {
-        console.log("at search shows. searchParam: "+searchParam)
+        console.log("at search shows. searchParam: " + searchParam)
         var headers = {
             'Content-Type': 'application/json'
         }
@@ -79,42 +79,42 @@ module.exports = {
         const id = show.name + show.language;
         return id;
     },
-    getShowIdByName: function(db, showName){
-                return new Promise(function (resolve, reject) {
-
-                        console.log("in getShowIdByName");
-                        let sql = `SELECT id FROM shows WHERE name = ${showName}`;
-
-                        console.log(sql);
-                        let query = db.query(sql, (err, result) => {
-                            if (err) {
-
-                                reject(err);
-                                throw err;
-
-                            }
-                            resolve(result);
-                        });
-                });
-    },
-    deleteFavoriteShow: function(db, showId, userId){
+    getShowIdByName: function (db, showName) {
         return new Promise(function (resolve, reject) {
 
-                console.log("in deleteFavoriteShow");
-                console.log(showId[0].id);
-                console.log(userId);
-                let sql = 'DELETE FROM usershow WHERE ShowId ="'+ showId[0].id +'" AND userId= "'+ userId +'";';
-                console.log(sql);
-                let query = db.query(sql, (err, result) => {
-                    if (err) {
+            console.log("in getShowIdByName");
+            let sql = `SELECT id FROM shows WHERE name = ${showName}`;
 
-                        reject(err);
-                        throw err;
+            console.log(sql);
+            let query = db.query(sql, (err, result) => {
+                if (err) {
 
-                    }
+                    reject(err);
+                    throw err;
 
-                    resolve('Successfully deleted!');
-                });
+                }
+                resolve(result);
+            });
+        });
+    },
+    deleteFavoriteShow: function (db, showId, userId) {
+        return new Promise(function (resolve, reject) {
+
+            console.log("in deleteFavoriteShow");
+            console.log(showId[0].id);
+            console.log(userId);
+            let sql = 'DELETE FROM usershow WHERE ShowId ="' + showId[0].id + '" AND userId= "' + userId + '";';
+            console.log(sql);
+            let query = db.query(sql, (err, result) => {
+                if (err) {
+
+                    reject(err);
+                    throw err;
+
+                }
+
+                resolve('Successfully deleted!');
+            });
         });
     },
     insertNewShow: function (db, newShow) {
@@ -123,65 +123,65 @@ module.exports = {
             console.log("in insertNewShow");
             console.log(newShow);
 
-                let sql1 ='INSERT INTO shows (id, name, language, premiered, rating, imageUrl)'+
-                'SELECT "' + newShow.id + '" ,"' + newShow.name + '" ,"' + newShow.language + '" ,"' + newShow.premiered + '" ,' + newShow.rating + ' ,"' + newShow.imageUrl + '" '+
+            let sql1 = 'INSERT INTO shows (id, name, language, premiered, rating, imageUrl)' +
+                'SELECT "' + newShow.id + '" ,"' + newShow.name + '" ,"' + newShow.language + '" ,"' + newShow.premiered + '" ,' + newShow.rating + ' ,"' + newShow.imageUrl + '" ' +
                 'WHERE NOT EXISTS (SELECT * FROM shows WHERE id = "' + newShow.id + '");'
-                console.log(sql1);
-                let query1 = db.query(sql1, (err, result) => {
-                    if (err) {
+            console.log(sql1);
+            let query1 = db.query(sql1, (err, result) => {
+                if (err) {
 
-                        reject(err);
-                        throw err;
+                    reject(err);
+                    throw err;
 
-                    }
-                    const showId = result;
-                    console.log("inserted show showId: " + showId);
-                    resolve('Success!');
-                });
+                }
+                const showId = result;
+                console.log("inserted show showId: " + showId);
+                resolve('Success!');
+            });
         });
     },
-    insertNewUserShow: function(db, newShow , userId){
-        return new Promise(function (resolve, reject){
+    insertNewUserShow: function (db, newShow, userId) {
+        return new Promise(function (resolve, reject) {
             let userShowSql = 'INSERT INTO userShow (userId, showId)' +
                 'SELECT "' + userId + '","' + newShow.id + '" ' +
                 'WHERE NOT EXISTS (SELECT * FROM userShow WHERE userId = "' + userId + '" and showId = "' + newShow.id + '");\r\n';
-                console.log(userShowSql);
-                let SqlQuery = db.query(userShowSql, (err, result) => {
-                    if (err) {
+            console.log(userShowSql);
+            let SqlQuery = db.query(userShowSql, (err, result) => {
+                if (err) {
 
-                        reject(err);
-                        throw err;
+                    reject(err);
+                    throw err;
 
-                    }
-                    const showId = result;
-                    console.log("inserted usershow row id: " + showId);
-                    resolve('Success!');
-                });
+                }
+                const showId = result;
+                console.log("inserted usershow row id: " + showId);
+                resolve('Success!');
+            });
 
         })
     },
-    insertGenres: function(db, newShow, myShow){
-        return new Promise(function (resolve, reject){
+    insertGenres: function (db, newShow, myShow) {
+        return new Promise(function (resolve, reject) {
             let genres = null;
-                if (myShow.genres && (genres = JSON.parse(myShow.genres))) {
-                    genres.forEach(async genre => {
-                        console.log('genre: ' + genre);
-                        genreField = genre;
-                        let genreSql = 'INSERT INTO genres (name) SELECT "' + genre + '" WHERE NOT EXISTS (SELECT * FROM genres WHERE name = "' + genre + '");';
-                        let genreShowSql = 'INSERT INTO genresShows (genre , showId) SELECT "' + genre + '","' + newShow.id + '" ' +
-                            'WHERE NOT EXISTS (SELECT * FROM genresShows WHERE genre = "' + genre + '" and showId = "' + newShow.id + '");';
-                            try{
-                               await asyncQuery(db, genreSql);
-                               await asyncQuery(db, genreShowSql);
-                            }
-                            catch(err){
-                                console.log(err);
-                                reject(err);
-                            }
+            if (myShow.genres && (genres = JSON.parse(myShow.genres))) {
+                genres.forEach(async genre => {
+                    console.log('genre: ' + genre);
+                    genreField = genre;
+                    let genreSql = 'INSERT INTO genres (name) SELECT "' + genre + '" WHERE NOT EXISTS (SELECT * FROM genres WHERE name = "' + genre + '");';
+                    let genreShowSql = 'INSERT INTO genresShows (genre , showId) SELECT "' + genre + '","' + newShow.id + '" ' +
+                        'WHERE NOT EXISTS (SELECT * FROM genresShows WHERE genre = "' + genre + '" and showId = "' + newShow.id + '");';
+                    try {
+                        await asyncQuery(db, genreSql);
+                        await asyncQuery(db, genreShowSql);
+                    }
+                    catch (err) {
+                        console.log(err);
+                        reject(err);
+                    }
 
-                        resolve('success')
-                    });
-                }
+                    resolve('success')
+                });
+            }
         });
     }
 

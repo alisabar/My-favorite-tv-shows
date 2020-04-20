@@ -56,12 +56,12 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5
   },
-  modalButtons:{
-        alignItems: "stretch",
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+  modalButtons: {
+    alignItems: "stretch",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  modalButton:{
+  modalButton: {
     backgroundColor: "#2196F3",
     borderRadius: 20,
     padding: 10,
