@@ -346,20 +346,20 @@ async function loginUser(req, res) {
     console.log('Start login.');
     console.log(req.body);
     try {
+
         const userData = await validateForm(req, res);
         const user = await getUser(userData);
-        if (!user) {
-            res.send('User doesn`t exists');
-            return;
-        }
         console.log(user);
         console.log("User logged in successfully: " + JSON.stringify(user));
         res.json({ userId: user[0].id });
+
+
     }
     catch (error) {
         console.log('Catched this:');
-        console.log(error.message);
-        res.sendStatus(500);
+        console.log(error);
+        res.json({err: error});
+
     }
 }
 
@@ -372,19 +372,26 @@ async function getUser(postedUser) {
         let sql = `SELECT * FROM users WHERE email = '${email}'`;
         db.query(sql, (err, result) => {
             if (err) {
-
+                console.log(err);
                 closeDb(db);
                 reject(err);
 
             }
             console.log(result);
             closeDb(db);
-            resolve(result);
+            if(result.length > 0){
+                resolve(result);
+            }
+            else{
+                reject("User doesn`t exist");
+            }
+
 
         });
     });
 
 }
+
 
 async function registerUser(req, res) {
 
@@ -448,8 +455,8 @@ async function validateForm(req, res) {
 }
 
 function createUserId(data) {
-    //const id = require('crypto').createHash('sha1').update({ email: data.email, password: data.password }).digest('base64');
-    const id = data.email + data.password;
+    const id = require('crypto').createHash('sha1').update(data.email.concat(data.password)).digest('base64');
+    //const id = data.email + data.password;
     return id;
 
 }

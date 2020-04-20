@@ -1,6 +1,6 @@
 import React from 'react';
 import {URL} from'./Config.js';
-import { Text, View, StyleSheet, TextInput, TouchableHighlight, Modal } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableHighlight, Modal, ToastAndroid } from 'react-native';
 
 export default class MyRegistration extends React.Component {
 
@@ -84,10 +84,8 @@ console.log("In register component did mount. modalVisible: "+ this.state.modalV
         .then((response) => response.json())
         .then((responseJson) => {
           console.log('responseJson: ', responseJson);
-          this.setState({
-            modalVisible: true,
-            msg: responseJson.msg,
-          });
+          ToastAndroid.showWithGravity(`Welcome!`, ToastAndroid.SHORT, ToastAndroid.CENTER);
+          navigate('MyFavourites');
         })
         .catch((error) => {
           console.error(error);

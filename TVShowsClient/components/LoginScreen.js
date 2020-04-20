@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, TextInput, TouchableHighlight } from 'react-native';
+import { Text, View, StyleSheet, TextInput, TouchableHighlight, ToastAndroid } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
 import * as actions from './ReduxStore/actions'
@@ -125,24 +125,18 @@ class MyLogin extends React.Component {
       })
         .then((response) => response.json())
         .then((responseJson) => {
-          dispatchActions.setUserID(responseJson.userId);
-          console.log('responseJson after login: ', responseJson);
-          this.setState({
-            msg: responseJson.userId,
-          }, async () => {
-
-            try {
-              console.log('before set item in async state');
-              console.log(this.state.msg);
-
-              await AsyncStorage.setItem('userId', this.state.msg);
-
-              console.log('after set item in async state');
+            if(responseJson.userId){
+              dispatchActions.setUserID(responseJson.userId);
+              console.log('responseJson after login: ', responseJson);
               navigate('MyFavourites');
-            } catch (e) {
-              console.log(e);
             }
-          });
+
+            else if(responseJson.err ){
+               console.log(responseJson.err);
+              ToastAndroid.showWithGravity(responseJson.err, ToastAndroid.SHORT, ToastAndroid.CENTER);
+
+            }
+
         })
         .catch((error) => {
           console.error(error);
