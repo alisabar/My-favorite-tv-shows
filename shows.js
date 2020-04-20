@@ -1,6 +1,21 @@
 const request = require('request');
 const express = require('express');
 
+
+async function asyncQuery(db, sql) {
+    return new Promise((resolve, reject) => {
+        db.query(sql, (err, result) => {
+
+            if (err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+
+        });
+    });
+}
+
 module.exports = {
     randomShows: function (res) {
         var headers = {
@@ -123,6 +138,50 @@ module.exports = {
                     console.log("inserted show showId: " + showId);
                     resolve('Success!');
                 });
+        });
+    },
+    insertNewUserShow: function(db, newShow , userId){
+        return new Promise(function (resolve, reject){
+            let userShowSql = 'INSERT INTO userShow (userId, showId)' +
+                'SELECT "' + userId + '","' + newShow.id + '" ' +
+                'WHERE NOT EXISTS (SELECT * FROM userShow WHERE userId = "' + userId + '" and showId = "' + newShow.id + '");\r\n';
+                console.log(userShowSql);
+                let SqlQuery = db.query(userShowSql, (err, result) => {
+                    if (err) {
+
+                        reject(err);
+                        throw err;
+
+                    }
+                    const showId = result;
+                    console.log("inserted usershow row id: " + showId);
+                    resolve('Success!');
+                });
+
+        })
+    },
+    insertGenres: function(db, newShow, myShow){
+        return new Promise(function (resolve, reject){
+            let genres = null;
+                if (myShow.genres && (genres = JSON.parse(myShow.genres))) {
+                    genres.forEach(async genre => {
+                        console.log('genre: ' + genre);
+                        genreField = genre;
+                        let genreSql = 'INSERT INTO genres (name) SELECT "' + genre + '" WHERE NOT EXISTS (SELECT * FROM genres WHERE name = "' + genre + '");';
+                        let genreShowSql = 'INSERT INTO genresShows (genre , showId) SELECT "' + genre + '","' + newShow.id + '" ' +
+                            'WHERE NOT EXISTS (SELECT * FROM genresShows WHERE genre = "' + genre + '" and showId = "' + newShow.id + '");';
+                            try{
+                               await asyncQuery(db, genreSql);
+                               await asyncQuery(db, genreShowSql);
+                            }
+                            catch(err){
+                                console.log(err);
+                                reject(err);
+                            }
+
+                        resolve('success')
+                    });
+                }
         });
     }
 

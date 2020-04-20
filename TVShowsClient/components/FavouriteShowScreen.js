@@ -6,7 +6,8 @@ import * as actions from './ReduxStore/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import ConfirmModal from './ConfirmationModal'
-
+import Moment from 'react-moment';
+import moment from 'moment';
 
 function mapStateToProps(initialState) {
     console.log('initial state FavouriteShowScreen: ', initialState);
@@ -60,7 +61,7 @@ class FavouriteShowScreen extends React.Component {
     const imgUrl = navigation.getParam('ImageUrl', 'NO-ID');
 
     this.setState({
-      defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 100, height: 100, }} />,
+      defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 150, height: 200, }} />,
       showId: item ? JSON.stringify(item.id)  : '',
       name: item ? JSON.stringify(item.name)  : '',
       language: item ? JSON.stringify(item.language) :  '',
@@ -89,17 +90,6 @@ class FavouriteShowScreen extends React.Component {
    startChecking=()=>{
     this.setState({checkIfToDelete:true})
    }
-
-//    try {
-//      const value = await AsyncStorage.getItem('userId')
-//      if (value !== null) {
-//        this.setState({
-//          userId: value
-//        })
-//      }
-//    } catch (e) {
-//      console.log(e);
-//    }
 
 
   handleChildClick=(toDelete)=>{
@@ -145,10 +135,10 @@ class FavouriteShowScreen extends React.Component {
                     dispatchActions.fetchShows(this.state.userId);
                     ToastAndroid.showWithGravity(`The show ${this.state.name} was deleted`, ToastAndroid.SHORT, ToastAndroid.CENTER);
 
-                    setTimeout(function(){
+                  //  setTimeout(function(){
 
-                        navigate('FavouritesScreen');
-                    },1000 );
+                        navigate('Favorites');
+                //    },1000 );
 
 
             }
@@ -170,17 +160,16 @@ class FavouriteShowScreen extends React.Component {
 
      return (
                     <View style={{ flex: 1, justifyContent: "space-around", padding:10}}>
-
-                            <View style={styles.image}>
-                                {this.state.defaultImage ? this.state.defaultImage : false}
-                            </View>
+                         <View style={styles.image}>
+                              {this.state.defaultImage ? this.state.defaultImage : false}
+                         </View>
 
                         <View style={styles.row}>
                             <View style={styles.heading}>
                                 <Text style={styles.headline}>name: </Text>
                             </View>
                             <View style={styles.info}>
-                                {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name}</Text>}
+                                {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name.split('"').join('')}</Text>}
                             </View>
                         </View>
                         <View style={styles.row}>
@@ -188,15 +177,25 @@ class FavouriteShowScreen extends React.Component {
                                 <Text style={styles.headline}>language: </Text>
                             </View>
                             <View style={styles.info}>
-                                {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language}</Text>}
+                                {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language.split('"').join('')}</Text>}
                             </View>
+                        </View>
+                        <View style={styles.row}>
+                          <View style={styles.heading}>
+                            <Text style={styles.headline}>Genres: </Text>
+                          </View>
+                          <View style={styles.info}>
+                            {this.state.genres == 'null' ? false : <Text style={styles.text}>{this.state.genres.substr(2,this.state.genres.length -4).split('","').join(', ')}</Text>}
+                          </View>
                         </View>
                         <View style={styles.row}>
                             <View style={styles.heading}>
                                 <Text style={styles.headline}>premiered: </Text>
                             </View>
                             <View style={styles.info}>
-                                {this.state.premiered == 'null' ? false : <Text style={styles.text}>{this.state.premiered}</Text>}
+
+                                    {this.state.premiered == 'null' ? false :  <Text style={styles.text}> {this.state.premiered.substr(1,this.state.genres.length).split('T')[0] }</Text>}
+
                             </View>
                         </View>
                         <View style={styles.row}>
@@ -260,7 +259,8 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   image:{
-     flex:3,
+
+     flex:4,
      flexDirection: 'row',
      justifyContent: 'center',
   },

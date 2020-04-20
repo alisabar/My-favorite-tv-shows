@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button } from 'react-native';
+import { Platform, StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button ,ToastAndroid} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {URL} from'./Config.js';
 import * as actions from './ReduxStore/actions.js';
@@ -39,7 +39,8 @@ class TVShowScreen extends React.Component {
       premiered: '',
       rating: '',
       genres: '',
-      imageUrl: ''
+      imageUrl: '',
+      buttonDisable: false,
     }
   }
   componentDidMount() {
@@ -49,9 +50,9 @@ class TVShowScreen extends React.Component {
 
     this.setState({
       defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 100, height: 100, }} />,
-      name: item ? JSON.stringify(item.show.name) : '',
-      language: item ? JSON.stringify(item.show.language) : '',
-      premiered: item ? JSON.stringify(item.show.premiered) : '',
+      name: item ? JSON.stringify(item.show.name): '',
+      language: item ? JSON.stringify(item.show.language): '',
+      premiered: item ? JSON.stringify(item.show.premiered): '',
       rating: item ? JSON.stringify(item.show.rating.average) : '',
       genres: item ? JSON.stringify(item.show.genres) : '',
       imageUrl: imgUrl ? JSON.stringify(imgUrl) : '',
@@ -71,6 +72,7 @@ class TVShowScreen extends React.Component {
     }
   }
   submitFavourite = () => {
+
     const { navigate } = this.props.navigation;
     const { dispatchActions } = this.props
 
@@ -96,12 +98,11 @@ class TVShowScreen extends React.Component {
         .then((responseJson) => {
           console.log('responseJson after addFavouriteShow: ', responseJson);
           dispatchActions.addFavorite(responseJson.show);
-          //todo modal
-          navigate('FavouritesScreen');
-//          this.setState({
-//            msg: responseJson.msg,
-//            showId: responseJson.id
-//          }, () => { navigate('Home'); });
+
+          ToastAndroid.showWithGravity(`The show ${this.state.name} was added to favorites`, ToastAndroid.SHORT, ToastAndroid.CENTER);
+
+          navigate('Favorites');
+
         })
         .catch((error) => {
           console.error(error);
@@ -125,7 +126,7 @@ class TVShowScreen extends React.Component {
             <Text style={styles.headline}>name: </Text>
           </View>
           <View style={styles.info}>
-            {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name}</Text>}
+            {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name.split('"').join('')}</Text>}
           </View>
         </View>
         <View style={styles.row}>
@@ -133,15 +134,25 @@ class TVShowScreen extends React.Component {
             <Text style={styles.headline}>language: </Text>
           </View>
           <View style={styles.info}>
-            {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language}</Text>}
+            {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language.split('"').join('')}</Text>}
           </View>
         </View>
+
+        <View style={styles.row}>
+          <View style={styles.heading}>
+            <Text style={styles.headline}>Genres: </Text>
+          </View>
+          <View style={styles.info}>
+            {this.state.genres == 'null' ? false : <Text style={styles.text}>{this.state.genres.substr(1,this.state.genres.length -2).split('"').join('')}</Text>}
+          </View>
+        </View>
+
         <View style={styles.row}>
           <View style={styles.heading}>
             <Text style={styles.headline}>premiered: </Text>
           </View>
           <View style={styles.info}>
-            {this.state.premiered == 'null' ? false : <Text style={styles.text}>{this.state.premiered}</Text>}
+            {this.state.premiered == 'null' ? false : <Text style={styles.text}>{this.state.premiered.split('"').join('')}</Text>}
           </View>
         </View>
         <View style={styles.row}>

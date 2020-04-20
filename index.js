@@ -55,20 +55,20 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
 
-app.use(session({
-    name: SESS_NAME,
-    resave: false,
-    saveUninitialized: false,
-    secret: SESS_SECRET,
-    cookie: {
-        maxAge: SESS_LIFETIME,
-        sameSite: true,
-        // secure: IN_PROD,
-
-    },
-    key: 'user_sid',
-
-}))
+//app.use(session({
+//    name: SESS_NAME,
+//    resave: false,
+//    saveUninitialized: false,
+//    secret: SESS_SECRET,
+//    cookie: {
+//        maxAge: SESS_LIFETIME,
+//        sameSite: true,
+//        // secure: IN_PROD,
+//
+//    },
+//    key: 'user_sid',
+//
+//}))
 
 app.use(express.json());
 
@@ -235,21 +235,7 @@ async function getShowById(db, id) {
     });
 
 }
-async function asyncQuery(db, sql) {
-    return new Promise((resolve, reject) => {
-        db.query(sql, (err, result) => {
-            closeDb(db);
 
-            if (err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-
-        });
-    });
-
-}
 
 async function deleteShow(req, res) {
   return new Promise(async (resolve, reject) => {
@@ -288,56 +274,37 @@ async function insertShow(req, res) {
                 rating: myShow.rating,
                 imageUrl: myShow.imageUrl
             };
-
-            const key1 = myShow.name.slice(1, myShow.name.length - 1);
-            console.log("key1: ", key1);
-            const key2 = myShow.language.slice(1, myShow.language.length - 1);
-            console.log("key2: ", key2);
-            const receivedShowId = key1.concat(key2);
-            console.log("receivedShowId" + receivedShowId);
+            const isDate = await checkDate(receivedShow.premiered)
+            console.log("isDate");
+            console.log(isDate)
+            if(!isDate){
+                receivedShow.premiered = null;
+            }
 
             const newShow = {
-                id: receivedShowId,
-                name: key1,
-                language: key2,
-                premiered: myShow.premiered.slice(1, myShow.premiered.length - 1),
+
+                name: myShow.name.slice(1, myShow.name.length - 1),
+                language: myShow.language.slice(1, myShow.language.length - 1),
+                premiered: receivedShow.premiered!='null' ? receivedShow.premiered.slice(1, receivedShow.premiered.length - 1) : '0000-00-00 00:00:00',
                 rating: !myShow.rating ? 0 : myShow.rating,
                 imageUrl: myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
 
             };
+
+            newShow.id = require("crypto")
+                        .createHash("sha256")
+                        .update(newShow.name.concat(newShow.premiered).concat(newShow.rating))
+                        .digest("hex");
 
             await shows.insertNewShow(db, newShow);
+            await shows.insertNewUserShow(db, newShow, userId);
+            await shows.insertGenres(db, newShow, myShow);
+            closeDb(db);
+            newShow.genres = myShow.genres ? JSON.parse(myShow.genres) : ''
 
-            let userShowSql = 'INSERT INTO userShow (userId, showId)' +
-                'SELECT "' + userId + '","' + receivedShowId + '" ' +
-                'WHERE NOT EXISTS (SELECT * FROM userShow WHERE userId = "' + userId + '" and showId = "' + receivedShowId + '");\r\n';
-            let genres = null;
-            await asyncQuery(connectDb(), userShowSql);
+            res.json({show: newShow});
 
-            if (myShow.genres && (genres = JSON.parse(myShow.genres))) {
-                genres.forEach(async genre => {
-                    console.log('genre: ' + genre);
-                    genreField = genre;
-                    let genreSql = 'INSERT INTO genres (name) SELECT "' + genre + '" WHERE NOT EXISTS (SELECT * FROM genres WHERE name = "' + genre + '");';
-                    let genreShowSql = 'INSERT INTO genresShows (genre , showId) SELECT "' + genre + '","' + receivedShowId + '" ' +
-                        'WHERE NOT EXISTS (SELECT * FROM genresShows WHERE genre = "' + genre + '" and showId = "' + receivedShowId + '");';
-                    await asyncQuery(connectDb(), genreSql);
-                    await asyncQuery(connectDb(), genreShowSql);
-
-
-                });
-            }
             resolve('success');
-            const MyShow = {
-                id: receivedShowId,
-                name: key1,
-                language: key2,
-                premiered: myShow.premiered.slice(1, myShow.premiered.length - 1),
-                rating: !myShow.rating ? 0 : myShow.rating,
-                imageUrl: myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
-                genres: myShow.genres ? JSON.parse(myShow.genres) : ''
-            };
-            res.json({show: MyShow});
         }
         catch (error) {
             console.log('Cought this:', error);
@@ -350,7 +317,31 @@ async function insertShow(req, res) {
     });
 
 }
+async function checkDate(resDate){
+    try{
+        const validation = await validateDate(resDate);
+        if(validation){
+            return true
+        }
+    }
+    catch(err){
+        console.log(err);
+        return false;
+    }
+}
 
+
+async function validateDate(resDate){
+    return new Promise((resolve, reject) => {
+        console.log("checking the date");
+        const d = new Date(resDate);
+        console.log(d.getDate());
+        if(d.getDate()=='NaN'){
+            reject("Not a Date");
+        }
+        else resolve(true);
+    });
+}
 async function loginUser(req, res) {
     console.log('Start login.');
     console.log(req.body);
