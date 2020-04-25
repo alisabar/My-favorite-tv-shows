@@ -23,7 +23,7 @@ module.exports = {
         }
         // Configure the request
         var options = {
-            url: 'http://api.tvmaze.com/search/shows?q=girls',
+            url: 'http://api.tvmaze.com/search/shows?q=star trek',
             method: 'GET',
             headers: headers,
         }

@@ -1,4 +1,6 @@
 import React, { Component, useState, useEffect } from "react";
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 import {
   Alert,
   Modal,
@@ -63,7 +65,7 @@ const ConfirmModal = (props) => {
           setModalVisible(true);
         }}
       >
-        <Text style={styles.textStyle}>&#x1f5d1;</Text>
+        <Icon name="trash" size={20} color="white" />
       </TouchableHighlight>
     </View>
   )

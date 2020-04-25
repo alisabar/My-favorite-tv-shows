@@ -91,15 +91,15 @@ const MyFavouriteShows = ({ navigation }) => {
 const styles = StyleSheet.create({
 
     container: {
-        paddingTop: 10,
-        flex: 1,
+        flex:1 ,
+
         backgroundColor: '#F5FCFF',
     },
     text: {
         color: 'black'
     },
     scroll: {
-        flex: 1,
+
     },
     heading: {
         marginLeft: 15,

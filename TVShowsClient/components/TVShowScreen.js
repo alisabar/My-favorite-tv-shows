@@ -5,6 +5,7 @@ import {URL} from'./Config.js';
 import * as actions from './ReduxStore/actions.js';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function mapStateToProps(initialState) {
     console.log('initial state in : TVShowScreen ', initialState);
@@ -164,9 +165,7 @@ class TVShowScreen extends React.Component {
           </View>
         </View>
         <TouchableHighlight onPress={this.submitFavourite} style={styles.touchable}>
-          <Text style={styles.button}>
-            &#128153;
-          </Text>
+            <Icon name="heart" size={20} color="white"/>
         </TouchableHighlight>
       </View>
     );
@@ -206,11 +205,9 @@ const styles = StyleSheet.create({
   },
   touchable: {
     marginBottom:20,
-
     backgroundColor: '#000080',
     padding: 10,
     alignSelf: 'center',
-
     borderRadius: 25,
 
   },

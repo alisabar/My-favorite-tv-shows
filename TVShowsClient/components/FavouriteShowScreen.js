@@ -6,8 +6,7 @@ import * as actions from './ReduxStore/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux';
 import ConfirmModal from './ConfirmationModal'
-import Moment from 'react-moment';
-import moment from 'moment';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 function mapStateToProps(initialState) {
   console.log('initial state FavouriteShowScreen: ', initialState);
@@ -159,7 +158,7 @@ class FavouriteShowScreen extends React.Component {
   render() {
 
     return (
-      <View style={{ flex: 1, justifyContent: "space-around", padding: 10 }}>
+      <View style={styles.container}>
         <View style={styles.image}>
           {this.state.defaultImage ? this.state.defaultImage : false}
         </View>
@@ -221,9 +220,9 @@ class FavouriteShowScreen extends React.Component {
 const styles = StyleSheet.create({
 
   container: {
-    paddingTop: 10,
     flex: 1,
-    backgroundColor: '#F5FCFF',
+    justifyContent: "space-around",
+    paddingTop: 10
   },
   headline: {
     color: 'black',

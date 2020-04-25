@@ -4,6 +4,7 @@ const express = require('express');
 const shows = require('./shows');
 const Joi = require('@hapi/joi');
 const mysql = require('mysql');
+const { uuid } = require('uuidv4');
 const TWO_HOURS = 1000 * 360 * 2;
 const {
     PORT = 5000,
@@ -455,7 +456,8 @@ async function validateForm(req, res) {
 }
 
 function createUserId(data) {
-    const id = require('crypto').createHash('sha1').update(data.email.concat(data.password)).digest('base64');
+    const id = uuid();
+    //const id = require('crypto').createHash('sha1').update(data.email.concat(data.password)).digest('base64');
     //const id = data.email + data.password;
     return id;
 

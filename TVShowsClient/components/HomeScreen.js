@@ -22,7 +22,7 @@ export default class HomeScreen extends Component {
       tvShowsData: '',
       shows: [],
       searchUrl: 'http://api.tvmaze.com/search/shows?q=',
-      searchKeyWords: 'girls'
+      searchKeyWords: 'star trek'
     }
   }
 
@@ -82,7 +82,7 @@ export default class HomeScreen extends Component {
       button = <ScrollView style={styles.scroll}>
         {
           showsData.map((item, index) => (
-            <TouchableHighlight key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image == null ? '' : item.show.image.medium })} underlayColor='#ddd'>
+            <TouchableHighlight style={styles.listItem} key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image == null ? '' : item.show.image.medium })} underlayColor='#ddd'>
               <TVShowComponent language={item.show.language} genres={item.show.genres} name={item.show.name} />
             </TouchableHighlight>
           ))
@@ -148,7 +148,12 @@ const styles = StyleSheet.create({
     color: 'black'
   },
   scroll: {
-    flex: 1,
+
+
+  },
+  listItem:{
+    borderBottomWidth:1,
+    borderColor: '#eee',
   },
   heading: {
     marginLeft: 15,
