@@ -48,10 +48,10 @@ const MyFavouriteShows = ({ navigation }) => {
 
         console.log("createListComponents favourites:");
         console.log(showsData);
-        let button = [];
+        let list = [];
 
         if (showsData) {
-            button = <ScrollView style={styles.scroll}>
+            list = <ScrollView style={styles.scroll}>
                 {
                     showsData.map((item, index) => (
                         <TouchableHighlight key={index} onPress={() => navigation.navigate('FavouriteShow', {
@@ -67,21 +67,17 @@ const MyFavouriteShows = ({ navigation }) => {
             </ScrollView>
         }
         else {
-            button = <Text style={styles.text}>hi</Text>;
+            list = <Text style={styles.text}>problem</Text>;
         }
-        setShows(button);
+        setShows(list);
 
     }
 
     return (
         <View style={styles.container}>
-            <View style={{ flex: 5, flexDirection: 'column' }}>
 
                 {shows ?
                     shows : <ActivityIndicator size="large" color="#0000ff" />}
-
-            </View>
-            <MessageModal message={actionMessage} visible={modalVisible} />
         </View>
     );
 
@@ -92,14 +88,13 @@ const styles = StyleSheet.create({
 
     container: {
         flex:1 ,
-
         backgroundColor: '#F5FCFF',
     },
     text: {
         color: 'black'
     },
     scroll: {
-
+     
     },
     heading: {
         marginLeft: 15,

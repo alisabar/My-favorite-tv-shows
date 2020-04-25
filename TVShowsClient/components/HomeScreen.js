@@ -77,9 +77,9 @@ export default class HomeScreen extends Component {
   createComponents = () => {
     console.log('tvShowsData', JSON.stringify(this.state.tvShowsData));
     let showsData = this.state.tvShowsData ? this.state.tvShowsData : false;
-    let button = [];
+    let list = [];
     if (showsData) {
-      button = <ScrollView style={styles.scroll}>
+      list = <ScrollView style={styles.scroll}>
         {
           showsData.map((item, index) => (
             <TouchableHighlight style={styles.listItem} key={index} onPress={() => this.props.navigation.navigate('TVShowScreen', { currentItem: item, ImageUrl: item.show.image == null ? '' : item.show.image.medium })} underlayColor='#ddd'>
@@ -90,9 +90,9 @@ export default class HomeScreen extends Component {
       </ScrollView>
 
     } else {
-      button = <Text style={styles.text}>hi</Text>;
+      list = <Text style={styles.text}>hi</Text>;
     }
-    this.setState({ shows: button });
+    this.setState({ shows: list });
 
   }
   searchFor = () => {
@@ -121,13 +121,15 @@ export default class HomeScreen extends Component {
             this.setState({ searchKeyWords: o.searchUrl }, () => { this.searchAgain() });
           }}
         />
-        <Text style={styles.heading} >
-          {this.state.searchKeyWords}
-        </Text>
-        <Text style={styles.heading} >
-          TV Shows:
-             </Text>
-        <View style={{ flex: 5, flexDirection: 'column' }}>
+        <View style={{flexDirection: 'row' }}>
+            <Text style={styles.heading} >
+              TV Shows By:
+            </Text>
+            <Text style={styles.heading} >
+               {this.state.searchKeyWords}
+            </Text>
+        </View>
+        <View style={{ flex: 6, flexDirection: 'column' }}>
           {this.state.shows ?
             this.state.shows : <ActivityIndicator size="large" color="#0000ff" />}
         </View>

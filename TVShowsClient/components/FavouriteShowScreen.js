@@ -222,7 +222,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "space-around",
-    paddingTop: 10
+    paddingTop: 10,
+    backgroundColor: '#F5FCFF',
   },
   headline: {
     color: 'black',
@@ -253,9 +254,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   row: {
+    paddingLeft:10,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
   image: {
 

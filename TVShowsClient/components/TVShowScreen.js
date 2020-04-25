@@ -50,7 +50,7 @@ class TVShowScreen extends React.Component {
     const imgUrl = navigation.getParam('ImageUrl', 'NO-ID');
 
     this.setState({
-      defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 100, height: 100, }} />,
+      defaultImage: <Image source={{ uri: imgUrl }} style={{ width: 150, height: 200, }} />,
       name: item ? JSON.stringify(item.show.name): '',
       language: item ? JSON.stringify(item.show.language): '',
       premiered: item ? JSON.stringify(item.show.premiered): '',
@@ -116,7 +116,7 @@ class TVShowScreen extends React.Component {
 
 
     return (
-      <View style={{ flex: 1, justifyContent: "space-around", padding: 10 }}>
+      <View style={styles.container}>
 
         <View style={styles.image}>
           {this.state.defaultImage ? this.state.defaultImage : false}
@@ -165,7 +165,7 @@ class TVShowScreen extends React.Component {
           </View>
         </View>
         <TouchableHighlight onPress={this.submitFavourite} style={styles.touchable}>
-            <Icon name="heart" size={20} color="white"/>
+            <Icon name="heart" size={20} color="white" onPress={this.submitFavourite}/>
         </TouchableHighlight>
       </View>
     );
@@ -175,8 +175,9 @@ class TVShowScreen extends React.Component {
 const styles = StyleSheet.create({
 
   container: {
-    paddingTop: 10,
     flex: 1,
+    justifyContent: "space-around",
+    paddingTop: 10,
     backgroundColor: '#F5FCFF',
   },
   headline: {
@@ -212,15 +213,15 @@ const styles = StyleSheet.create({
 
   },
   row: {
+    paddingLeft:10,
     flex: 1,
     flexDirection: 'row',
     alignItems: 'flex-start',
-
+    justifyContent: 'space-between',
 
   },
   image: {
-
-    flex: 3,
+    flex: 4,
     flexDirection: 'row',
     justifyContent: 'center',
   },
