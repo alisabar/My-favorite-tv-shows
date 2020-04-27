@@ -133,12 +133,7 @@ class FavouriteShowScreen extends React.Component {
 
             dispatchActions.fetchShows(this.state.userId);
             ToastAndroid.showWithGravity(`The show ${this.state.name} was deleted`, ToastAndroid.SHORT, ToastAndroid.CENTER);
-
-            //  setTimeout(function(){
-
             navigate('Favorites');
-            //    },1000 );
-
 
           }
           else {
@@ -245,14 +240,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: 'white',
   },
-  touchable: {
 
-    height: 30,
-    width: 50,
-    backgroundColor: '#000080',
-    borderRadius: 30,
-    alignSelf: 'center',
-  },
   row: {
     paddingLeft:10,
     flex: 1,

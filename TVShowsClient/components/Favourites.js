@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
         color: 'black'
     },
     scroll: {
-     
+
     },
     heading: {
         marginLeft: 15,

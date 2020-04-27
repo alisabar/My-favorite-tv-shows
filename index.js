@@ -289,7 +289,7 @@ async function insertShow(req, res) {
                 premiered: receivedShow.premiered != 'null' ? receivedShow.premiered.slice(1, receivedShow.premiered.length - 1) : '0000-00-00 00:00:00',
                 rating: !myShow.rating ? 0 : myShow.rating,
                 imageUrl: myShow.imageUrl.slice(1, myShow.imageUrl.length - 1),
-
+                genres : myShow.genres ? JSON.parse(myShow.genres) : '',
             };
 
             newShow.id = require("crypto")
@@ -299,18 +299,15 @@ async function insertShow(req, res) {
 
             await shows.insertNewShow(db, newShow);
             await shows.insertNewUserShow(db, newShow, userId);
-            await shows.insertGenres(db, newShow, myShow);
+            await shows.insertGenres(db, newShow);
             closeDb(db);
-            newShow.genres = myShow.genres ? JSON.parse(myShow.genres) : ''
+            res.json({show: newShow});
 
-            res.json({ show: newShow });
 
-            resolve('success');
         }
         catch (error) {
             console.log('Cought this:', error);
             console.log(error.message);
-            reject(error);
             res.sendStatus(500);
         }
 

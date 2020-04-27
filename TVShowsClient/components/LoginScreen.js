@@ -85,8 +85,6 @@ class MyLogin extends React.Component {
     const receivedEmail = navigation.getParam('email', '');
     const receivedPass = navigation.getParam('password', '');
 
-    //this.validateEmail(receivedEmail);
-    //this.validatePass(receivedPass);
 
     if (this.state.email.length == 0 && this.state.password.length == 0) {
       if (prevState.email != receivedEmail && prevState.password != receivedPass) {

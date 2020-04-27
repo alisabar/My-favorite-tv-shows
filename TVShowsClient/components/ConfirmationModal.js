@@ -21,12 +21,12 @@ const ConfirmModal = (props) => {
   const positiveAnswer = () => {
 
     setModalVisible(!modalVisible);
-    props.onClick(true); // pass any argument to the callback
+    props.onClick(true);
   }
   const negativeAnswer = () => {
 
     setModalVisible(!modalVisible);
-    props.onClick(false); // pass any argument to the callback
+    props.onClick(false);
   }
 
 
@@ -70,24 +70,6 @@ const ConfirmModal = (props) => {
     </View>
   )
 
-
-  //   else{
-  //      return(
-  //       <View style={styles.centeredView}>
-  //             <Modal
-  //               animationType="fade"
-  //               transparent={true}
-  //               visible={modalVisible}
-  //             >
-  //               <View style={styles.centeredView}>
-  //                 <View style={styles.modalView}>
-  //                   <Text style={styles.modalText}>{message}</Text>
-  //                 </View>
-  //               </View>
-  //             </Modal>
-  //        </View>)
-  //   }
-
 };
 
 const styles = StyleSheet.create({
@@ -127,8 +109,12 @@ const styles = StyleSheet.create({
   openButton: {
     backgroundColor: '#000080',
     borderRadius: 25,
-    padding: 10,
-    marginBottom: 20,
+    paddingLeft: 13,
+    paddingRight: 13,
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginBottom: 35,
+
   },
   textStyle: {
     fontSize: 20,

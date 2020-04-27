@@ -65,6 +65,7 @@ export default class MyRegistration extends React.Component {
     }
   }
   SubmitForm = () => {
+    const { navigate } = this.props.navigation;
     console.log('submit form pressed');
     console.log('email: ' + this.state.email);
     console.log('password: ' + this.state.password);

@@ -67,5 +67,3 @@ const LoginStackNavigator = createSwitchNavigator(
 );
 
 export default createAppContainer(LoginStackNavigator);
-
-//export default createAppContainer(TabNavigator);

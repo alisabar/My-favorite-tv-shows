@@ -205,6 +205,8 @@ const styles = StyleSheet.create({
 
   },
   touchable: {
+
+
     marginBottom:20,
     backgroundColor: '#000080',
     padding: 10,

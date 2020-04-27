@@ -160,10 +160,10 @@ module.exports = {
 
         })
     },
-    insertGenres: function (db, newShow, myShow) {
+    insertGenres: function (db, newShow) {
         return new Promise(function (resolve, reject) {
             let genres = null;
-            if (myShow.genres && (genres = JSON.parse(myShow.genres))) {
+            if (newShow.genres && (genres = newShow.genres )) {
                 genres.forEach(async genre => {
                     console.log('genre: ' + genre);
                     genreField = genre;
