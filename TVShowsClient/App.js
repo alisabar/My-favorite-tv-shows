@@ -8,7 +8,7 @@
 
 import React from 'react';
 import { View, StyleSheet,Text} from 'react-native';
-import LoginStackNavigator from './components/Tabs';
+import LoginStackNavigator from './components/Navigator';
 
 
 function App() {

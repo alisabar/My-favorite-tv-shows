@@ -4,14 +4,14 @@ import {
     StyleSheet, Text, ActivityIndicator, Image, TextInput, View, ScrollView, TouchableHighlight, Button
 } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
-import FavouriteShowScreen from './FavouriteShowScreen.js';
+import FavouriteShowScreen from './FavoriteShowDetails.js';
 import TVShowComponent from './TVshow.js'
 import * as actions from './ReduxStore/actions'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { useDispatch, useSelector } from "react-redux"
 import { rootReducer, initialState } from './ReduxStore/reducers'
-import MessageModal from './MessageModal'
+
 
 const MyFavouriteShows = ({ navigation }) => {
 

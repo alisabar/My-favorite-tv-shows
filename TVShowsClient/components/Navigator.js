@@ -2,12 +2,12 @@ import React from 'react';
 import { createAppContainer, createSwitchNavigator  } from 'react-navigation';
 import { createMaterialTopTabNavigator } from 'react-navigation-tabs';
 import { createStackNavigator } from 'react-navigation-stack';
-import MyRegistration from './RegistrationScreen.js';
-import MyLogin from './LoginScreen.js';
+import MyRegistration from './Registration.js';
+import MyLogin from './Login.js';
 import FavouriteScreen from './Favourites.js';
-import TVShowScreen from './TVShowScreen.js';
+import TVShowScreen from './TVShowDetails.js';
 import HomeScreen from './HomeScreen.js';
-import FavouriteShowScreen from './FavouriteShowScreen.js';
+import FavouriteShowScreen from './FavoriteShowDetails.js';
 
 const AppNavigator = createStackNavigator(
     {

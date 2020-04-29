@@ -20,7 +20,7 @@ function mapDispatchToProps(dispatch) {
     dispatchActions: bindActionCreators(actions, dispatch)
   }
 }
-class FavouriteShowScreen extends React.Component {
+class FavoriteShowScreen extends React.Component {
 
   static navigationOptions = {
     title: 'Details',
@@ -155,7 +155,10 @@ class FavouriteShowScreen extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.image}>
-          {this.state.defaultImage ? this.state.defaultImage : false}
+          {this.state.defaultImage ?
+           this.state.defaultImage :
+            false
+          }
         </View>
 
         <View style={styles.row}>
@@ -163,7 +166,11 @@ class FavouriteShowScreen extends React.Component {
             <Text style={styles.headline}>name: </Text>
           </View>
           <View style={styles.info}>
-            {this.state.name == 'null' ? false : <Text style={styles.text}>{this.state.name.split('"').join('')}</Text>}
+            {this.state.name == 'null' ?
+             false :
+             <Text style={styles.text}>
+                {this.state.name.split('"').join('')}
+             </Text>}
           </View>
         </View>
         <View style={styles.row}>
@@ -171,7 +178,11 @@ class FavouriteShowScreen extends React.Component {
             <Text style={styles.headline}>language: </Text>
           </View>
           <View style={styles.info}>
-            {this.state.language == 'null' ? false : <Text style={styles.text}>{this.state.language.split('"').join('')}</Text>}
+            {this.state.language == 'null' ?
+             false : <Text style={styles.text}>
+                {this.state.language.split('"').join('')}
+             </Text>
+            }
           </View>
         </View>
         <View style={styles.row}>
@@ -179,7 +190,12 @@ class FavouriteShowScreen extends React.Component {
             <Text style={styles.headline}>Genres: </Text>
           </View>
           <View style={styles.info}>
-            {this.state.genres == 'null' ? false : <Text style={styles.text}>{this.state.genres.substr(2, this.state.genres.length - 4).split('","').join(', ')}</Text>}
+            {this.state.genres == 'null' ?
+             false :
+             <Text style={styles.text}>
+                 {this.state.genres.substr(2, this.state.genres.length - 4).split('","').join(', ')}
+             </Text>
+             }
           </View>
         </View>
         <View style={styles.row}>
@@ -188,7 +204,12 @@ class FavouriteShowScreen extends React.Component {
           </View>
           <View style={styles.info}>
 
-            {this.state.premiered == 'null' ? false : <Text style={styles.text}> {this.state.premiered.substr(1, this.state.genres.length).split('T')[0]}</Text>}
+            {this.state.premiered == 'null' ?
+             false :
+             <Text style={styles.text}>
+                {this.state.premiered.substr(1, this.state.genres.length).split('T')[0]}
+             </Text>
+            }
 
           </View>
         </View>
@@ -203,7 +224,11 @@ class FavouriteShowScreen extends React.Component {
 
         <View>
         </View>
-        <ConfirmModal onClick={this.handleChildClick} message={this.state.name} visible={this.state.modalVisible} />
+        <ConfirmModal
+            onClick={this.handleChildClick}
+            message={this.state.name}
+            visible={this.state.modalVisible}
+        />
       </View>
 
     );
@@ -259,4 +284,4 @@ const styles = StyleSheet.create({
   },
 
 });
-export default connect(mapStateToProps, mapDispatchToProps)(FavouriteShowScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(FavoriteShowScreen);
