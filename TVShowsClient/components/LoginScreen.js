@@ -63,16 +63,33 @@ class MyLogin extends React.Component {
     if (result) {
       this.setState({ password: pass, valid_pass_msg: '' })
       if (pass.length < 8) {
-        this.setState({ is_pass_filled: false, is_pass_valid: false, valid_pass_msg: 'Password should be at least 8 characters long.' });
+        this.setState({
+            is_pass_filled: false,
+            is_pass_valid: false,
+            valid_pass_msg: 'Password should be at least 8 characters long.'
+        });
       }
       else if (pass.length >= 8) {
-        this.setState({ is_pass_filled: true, valid_pass_msg: '', is_pass_valid: true })
+        this.setState({
+            is_pass_filled: true,
+            valid_pass_msg: '',
+            is_pass_valid: true
+        })
       }
     } else if (pass.length == 0) {
-      this.setState({ password: pass, is_pass_filled: false, valid_pass_msg: '', is_pass_valid: false })
+      this.setState({
+          password: pass,
+          is_pass_filled: false,
+          valid_pass_msg: '',
+          is_pass_valid: false 
+      })
     }
     else {
-      this.setState({ password: pass, is_pass_valid: false, valid_pass_msg: 'Password should contain numbers and letters.' });
+      this.setState({
+          password: pass,
+          is_pass_valid: false,
+          valid_pass_msg: 'Password should contain numbers and letters.'
+      });
     }
   }
   componentDidMount = () => {
@@ -182,7 +199,9 @@ class MyLogin extends React.Component {
           <View style={styles.row}>
 
             <Text style={styles.msg}>
-              {this.state.is_email_filled ? this.state.is_email_valid ? '' : this.state.valid_email_msg : this.state.valid_email_msg}
+              {this.state.is_email_filled ?
+               this.state.is_email_valid ? '' : this.state.valid_email_msg :
+                this.state.valid_email_msg}
             </Text>
           </View>
 
@@ -200,7 +219,9 @@ class MyLogin extends React.Component {
 
           <View style={styles.row}>
             <Text style={styles.msg}>
-              {this.state.is_pass_filled ? this.state.is_pass_valid ? '' : this.state.valid_pass_msg : this.state.valid_pass_msg}
+              {this.state.is_pass_filled ?
+               this.state.is_pass_valid ? '' : this.state.valid_pass_msg :
+                this.state.valid_pass_msg}
             </Text>
           </View>
           <View style={styles.submitButton}>

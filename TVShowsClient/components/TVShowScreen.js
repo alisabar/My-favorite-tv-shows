@@ -73,7 +73,7 @@ class TVShowScreen extends React.Component {
     }
   }
   submitFavourite = () => {
-
+    this.setState({buttonDisable : true});
     const { navigate } = this.props.navigation;
     const { dispatchActions } = this.props
 
@@ -99,14 +99,13 @@ class TVShowScreen extends React.Component {
         .then((responseJson) => {
           console.log('responseJson after addFavouriteShow: ', responseJson);
           dispatchActions.addFavorite(responseJson.show);
-
           ToastAndroid.showWithGravity(`The show ${this.state.name} was added to favorites`, ToastAndroid.SHORT, ToastAndroid.CENTER);
-
           navigate('Favorites');
 
         })
         .catch((error) => {
           console.error(error);
+          this.setState({buttonDisable:false})
         });
 
     }
@@ -164,9 +163,12 @@ class TVShowScreen extends React.Component {
             {this.state.rating == 'null' ? false : <Text style={styles.text}>{this.state.rating}</Text>}
           </View>
         </View>
-        <TouchableHighlight onPress={this.submitFavourite} style={styles.touchable}>
-            <Icon name="heart" size={20} color="white" onPress={this.submitFavourite}/>
-        </TouchableHighlight>
+        {this.state.buttonDisable ? true :
+            <TouchableHighlight onPress={this.submitFavourite} style={styles.touchable}>
+                <Icon name="heart" size={20} color="white" onPress={this.submitFavourite}/>
+            </TouchableHighlight>
+        }
+
       </View>
     );
   }
