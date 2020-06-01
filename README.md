@@ -7,6 +7,5 @@ Create favorite lists and more.
 
 ## Tech Stack
 
-My Favorite shows application was(and still is) developed 
-using React Native , NodeJS , MySQL
+React Native / Redux | NodeJS | MySQL
 
