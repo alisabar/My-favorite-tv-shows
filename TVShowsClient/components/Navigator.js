@@ -5,14 +5,14 @@ import { createStackNavigator } from 'react-navigation-stack';
 import MyRegistration from './Registration.js';
 import MyLogin from './Login.js';
 import FavouriteScreen from './Favourites.js';
-import TVShowScreen from './TVShowDetails.js';
+import TVShowDetails from './TVShowDetails.js';
 import HomeScreen from './HomeScreen.js';
-import FavouriteShowScreen from './FavoriteShowDetails.js';
+import FavouriteShowDetails from './FavoriteShowDetails.js';
 
 const AppNavigator = createStackNavigator(
     {
         HomeScreen: HomeScreen,
-        TVShowScreen: TVShowScreen,
+        TVShowScreen: TVShowDetails,
     },
     {
         initialRouteName: "HomeScreen"
@@ -23,7 +23,7 @@ const AppNavigator = createStackNavigator(
 const MyShowsContainer = createStackNavigator(
     {
         Favorites: FavouriteScreen,
-        FavouriteShow: FavouriteShowScreen,
+        FavouriteShow: FavouriteShowDetails,
     },
     {
         initialRouteName: "Favorites"
@@ -33,13 +33,10 @@ const MyShowsContainer = createStackNavigator(
 
 const TabNavigator = createMaterialTopTabNavigator(
     {
-        Signup: MyRegistration,
         Login: MyLogin,
-    },
+        Signup: MyRegistration,
 
-    {
-        initialRouteName: "Login"
-    }
+    },
 
 );
 

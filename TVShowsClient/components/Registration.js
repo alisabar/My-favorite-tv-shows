@@ -55,7 +55,8 @@ export default class MyRegistration extends React.Component {
     console.log('submit form pressed');
     console.log('email: ' + this.state.email);
     console.log('password: ' + this.state.password);
-
+    console.log('is_email_valid: ' + this.state.is_email_valid);
+    console.log('is_pass_valid: ' + this.state.is_pass_valid);
     if (this.state.is_email_valid && this.state.is_pass_valid) {
       fetch(URL.concat('/api/register'), {
         method: 'POST',

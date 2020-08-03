@@ -31,10 +31,10 @@ export default class PasswordInput extends React.Component {
       const result = patt.test(pass);
       if (result) {
         this.setState({ password: pass, valid_pass_msg: '' })
-        if (pass.length < 8) {
+        if (pass.length < 7) {
           this.setState({ is_pass_filled: false, is_pass_valid: false, valid_pass_msg: 'Password should be at least 8 characters long.' });
         }
-        else if (pass.length >= 8) {
+        else if (pass.length >= 7) {
           this.setState({ is_pass_filled: true, valid_pass_msg: '', is_pass_valid: true })
         }
       } else if (pass.length == 0) {
@@ -56,6 +56,7 @@ export default class PasswordInput extends React.Component {
                 Password:
             </Text>
               <TextInput
+                secureTextEntry={true}
                 style={input.input}
                 onChangeText={(password) => this.validatePass(password)}
                 value={this.state.password}
